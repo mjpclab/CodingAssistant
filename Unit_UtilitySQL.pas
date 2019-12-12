@@ -38,11 +38,13 @@ end;
 procedure TCodeUtilitySQL.AdjustWrapBySyntax;
 const
     WrapStr:string=#13#10;
-    KeyWords:array[0..20] of string=(
+    KeyWords:array[0..23] of string=(
         'SELECT','INSERT','VALUES','FROM','WHERE','GROUP','HAVING','ORDER'
         ,'LEFT JOIN','RIGHT JOIN','LEFT OUTER JOIN','RIGHT OUTER JOIN'
         ,'INNER JOIN','FULL JOIN','CROSS JOIN'
         ,'BEGIN','END','CREATE','UPDATE','SET','DELETE'
+        ,'COMMIT','ROLLBACK'
+        ,'GO'
     );
 var
     i:integer;

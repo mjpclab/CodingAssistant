@@ -85,12 +85,14 @@ end;
 
 procedure TCodeUtilitySQL.ConvertKeyWordsToUpperCase;
 const
-    KeyWords:array[0..47] of string=(
+    KeyWords:array[0..63] of string=(
         'UNION','SELECT','INSERT','INTO','VALUES','DISTINCT','TOP','PERCENT','FROM',
         'WHERE','LIKE','IN','EXISTS','GROUP','BY','HAVING','ORDER',
         'ASC','DESC','LEFT','OUTER','FULL','CROSS','JOIN','RIGHT','INNER','ON','MIN','MAX',
         'SUM','AVERAGE','COUNT','BEGIN','END','CREATE','ALTER','DROP','UPDATE','SET',
         'DELETE','AS','GO','AND','OR','IS','NOT','NULL','VIEW'
+        ,'TRY','CATCH','DISTRIBUTED','TRANSACTION','TRAN','COMMIT','ROLLBACK'
+        ,'WITH','MARK','PROCEDURE','FUNCTION','TRIGGER','INDEX','UNIQUE','PRIMARY','KEY'
     );
 var
     i:integer;

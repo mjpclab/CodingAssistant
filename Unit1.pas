@@ -7,7 +7,8 @@ uses
   Windows, ShellAPI, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls,  ComCtrls,
   Unit_Utility, ImgList, Buttons, ToolWin, XPStyleActnCtrls, ActnList, ActnMan,
-  Menus, ActnPopup, Spin, PlatformDefaultStyleActnCtrls, System.Actions;
+  Menus, ActnPopup, Spin, PlatformDefaultStyleActnCtrls, System.Actions,
+  System.ImageList;
 
 
 type
@@ -138,7 +139,6 @@ type
     btnIeRemoveIf: TButton;
     drpIeIfOperator: TComboBox;
     drpIeIfVersion: TComboBox;
-    pnlCursorPosotion: TPanel;
     edtDelPrefix: TEdit;
     btnDelPrefix: TButton;
     edtDelSuffix: TEdit;
@@ -262,6 +262,10 @@ type
     lblSeqStepLength: TLabel;
     lblSeqEndValue: TLabel;
     lblSeqStepCount: TLabel;
+    pnlRowNum: TPanel;
+    pnlRowLabel: TPanel;
+    pnlColNum: TPanel;
+    pnlColLabel: TPanel;
     procedure btnMergeLinesClick(Sender: TObject);
     procedure nPrefixClick(Sender: TObject);
     procedure btnPostfixClick(Sender: TObject);
@@ -585,7 +589,8 @@ uses Clipbrd;
         rowNum,colNum:Integer;
     begin
         GetCursorPosition(txtMemo,rowNum,colNum);
-        pnlCursorPosotion.Caption:=Format('%d ÐÐ , %d ÁÐ',[rownum,colnum]);
+        pnlRowNum.Caption := IntToStr(rownum);
+        pnlColNum.Caption := IntToStr(colnum);
     end;
 
 {$ENDREGION}

@@ -5,7 +5,7 @@ object frmMain: TfrmMain
   ClientHeight = 601
   ClientWidth = 964
   Color = clBtnFace
-  Font.Charset = GB2312_CHARSET
+  Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
   Font.Name = #23435#20307
@@ -226,15 +226,43 @@ object frmMain: TfrmMain
       Action = actStayOnTop
       Style = tbsCheck
     end
-    object pnlCursorPosotion: TPanel
+    object pnlRowNum: TPanel
       Left = 246
       Top = 0
-      Width = 120
+      Width = 43
+      Height = 22
+      Alignment = taRightJustify
+      BevelOuter = bvNone
+      Caption = '1'
+      TabOrder = 0
+    end
+    object pnlRowLabel: TPanel
+      Left = 289
+      Top = 0
+      Width = 24
       Height = 22
       BevelOuter = bvNone
-      Caption = '1 '#34892' , 1 '#21015
-      ParentBackground = False
-      TabOrder = 0
+      Caption = #34892
+      TabOrder = 1
+    end
+    object pnlColNum: TPanel
+      Left = 313
+      Top = 0
+      Width = 43
+      Height = 22
+      Alignment = taRightJustify
+      BevelOuter = bvNone
+      Caption = '1'
+      TabOrder = 2
+    end
+    object pnlColLabel: TPanel
+      Left = 356
+      Top = 0
+      Width = 24
+      Height = 22
+      BevelOuter = bvNone
+      Caption = #21015
+      TabOrder = 3
     end
   end
   object txtMemo: TMemo
@@ -244,10 +272,10 @@ object frmMain: TfrmMain
     Height = 320
     Align = alClient
     Ctl3D = True
-    Font.Charset = GREEK_CHARSET
+    Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
-    Font.Name = 'Courier New'
+    Font.Name = 'Consolas'
     Font.Style = []
     HideSelection = False
     ParentCtl3D = False
@@ -2181,7 +2209,7 @@ object frmMain: TfrmMain
     Left = 104
     Top = 392
     Bitmap = {
-      494C01010A000B00A80010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010A00AC00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

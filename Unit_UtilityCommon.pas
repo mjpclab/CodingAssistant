@@ -48,7 +48,8 @@ type TCodeUtilityCommon=class
     procedure CompactEmptyLine(const IncludeWhiteSpaceLine:boolean);
     procedure Replace(const strFrom:string; const strTo:string);
     //procedure SendKeyPress(const IsPureText:Boolean);
-    procedure RevertLines;
+    procedure SortLines;
+    procedure ReverseLines;
 
     procedure InsertString(const index:Integer;const content:string);
     procedure RInsertString(const rIndex:Integer;const content:string);
@@ -680,7 +681,17 @@ begin
     with FLines do Text:=StringReplace(Text,strFrom,strTo,[rfReplaceAll]);
 end;
 
-procedure TCodeUtilityCommon.RevertLines;
+procedure TCodeUtilityCommon.SortLines;
+var
+  buffer:TSTringList;
+begin
+  buffer:=TStringList.Create;
+  buffer.Assign(FLines);
+  buffer.Sort;
+  FLines.Assign(buffer);
+end;
+
+procedure TCodeUtilityCommon.ReverseLines;
 var
     buffer:TStrings;
     i:integer;

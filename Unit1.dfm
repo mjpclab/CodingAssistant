@@ -469,14 +469,14 @@ object frmMain: TfrmMain
           TabOrder = 34
           OnClick = btnMergeLinesClick
         end
-        object btnRevertLines: TButton
+        object btnReverseLines: TButton
           Left = 797
-          Top = 124
+          Top = 155
           Width = 126
           Height = 25
           Caption = #21453#21521#34892#24207
-          TabOrder = 60
-          OnClick = btnRevertLinesClick
+          TabOrder = 61
+          OnClick = btnReverseLinesClick
         end
         object chkDeleteWhiteSpaceLine: TCheckBox
           Left = 658
@@ -859,6 +859,15 @@ object frmMain: TfrmMain
           ParentCtl3D = False
           TabOrder = 40
           Value = 1
+        end
+        object btnSort: TButton
+          Left = 797
+          Top = 124
+          Width = 126
+          Height = 25
+          Caption = #36882#22686#25490#24207
+          TabOrder = 60
+          OnClick = btnSortClick
         end
       end
       object TabSheet4: TTabSheet

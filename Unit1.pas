@@ -80,7 +80,7 @@ type
     btnPascalCombineString: TButton;
     btnPascalCancelCombineString: TButton;
     btnPascalExchangePascalLet: TButton;
-    btnRevertLines: TButton;
+    btnReverseLines: TButton;
     TabSheet7: TTabSheet;
     btnPhpCombineSingleQuoteString: TButton;
     btnPhpCancelCombineSingleQuoteString: TButton;
@@ -266,6 +266,7 @@ type
     pnlRowLabel: TPanel;
     pnlColNum: TPanel;
     pnlColLabel: TPanel;
+    btnSort: TButton;
     procedure btnMergeLinesClick(Sender: TObject);
     procedure nPrefixClick(Sender: TObject);
     procedure btnPostfixClick(Sender: TObject);
@@ -313,7 +314,7 @@ type
     procedure btnPascalCancelCombineStringClick(Sender: TObject);
     procedure btnPascalCombineStringClick(Sender: TObject);
     procedure btnPascalExchangePascalLetClick(Sender: TObject);
-    procedure btnRevertLinesClick(Sender: TObject);
+    procedure btnReverseLinesClick(Sender: TObject);
     procedure btnPhpCombineSingleQuoteStringClick(Sender: TObject);
     procedure btnPhpCancelCombineSingleQuoteStringClick(Sender: TObject);
     procedure btnPhpCombineDoubleQuoteStringClick(Sender: TObject);
@@ -390,6 +391,7 @@ type
     procedure btnClearClick(Sender: TObject);
     procedure btnSeqToEndValueClick(Sender: TObject);
     procedure btnSeqRepeatCountClick(Sender: TObject);
+    procedure btnSortClick(Sender: TObject);
   private
     Tool:TCodeUtility;
     procedure GetCursorPosition(const txt:TCustomEdit;out rowNum,colNum:integer);
@@ -690,9 +692,14 @@ uses Clipbrd;
         Tool.Common.Replace(edtReplaceFrom.Text,edtReplaceTo.Text);
     end;
 
-    procedure TfrmMain.btnRevertLinesClick(Sender: TObject);
+    procedure TfrmMain.btnSortClick(Sender: TObject);
     begin
-        Tool.Common.RevertLines;
+        Tool.Common.SortLines;
+    end;
+
+    procedure TfrmMain.btnReverseLinesClick(Sender: TObject);
+    begin
+        Tool.Common.ReverseLines;
     end;
 
     procedure TfrmMain.btnDelNPrefixClick(Sender: TObject);
@@ -914,7 +921,7 @@ uses Clipbrd;
         );
     end;
 
-    procedure TfrmMain.btnSeqRepeatCountClick(Sender: TObject);
+procedure TfrmMain.btnSeqRepeatCountClick(Sender: TObject);
     begin
         Tool.Sequence.SequenceByRepeatCount(
         	edtSeqTemplate.Text,

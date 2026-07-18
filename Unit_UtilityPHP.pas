@@ -35,7 +35,7 @@ begin
     FLines:=theLines;
 end;
 
-{$REGION '组合'}
+{$REGION '缁勫悎'}
     procedure TCodeUtilityPHP.CombineToStringExpression(const quoteChar:char);
     var
         i:integer;
@@ -89,7 +89,7 @@ end;
 
 {$ENDREGION}
 
-{$REGION '取消组合'}
+{$REGION '鍙栨秷缁勫悎'}
     procedure TCodeUtilityPHP.CancelCombineStringExpression(const quoteChar:char);
     var
         i:integer;
@@ -168,10 +168,10 @@ begin
     buffer:=TStringList.Create;
     buffer.Assign(FLines);
 
-    if buffer.Count>0 then begin                             //存在数据
+    if buffer.Count>0 then begin                             //瀛樺湪鏁版嵁
         firstLine:=Trim(buffer[0]);
         lastLine:=Trim(buffer[buffer.Count-1]);
-        if Pos(SignHereDoc,firstLine)=1 then begin           //存在here doc
+        if Pos(SignHereDoc,firstLine)=1 then begin           //瀛樺湪here doc
             flag:=Trim(
                 RightStr(
                     firstLine

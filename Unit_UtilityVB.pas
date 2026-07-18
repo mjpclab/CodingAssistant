@@ -123,7 +123,7 @@ const
     strNewLine:string=#13#10;
 begin
     FLines.Text:=
-        '#Region "INotifyPropertyChanged ³ÉÔ±"' + strNewLine +
+        '#Region "INotifyPropertyChanged æˆå‘˜"' + strNewLine +
         '	Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged' + strNewLine +
         '' + strNewLine +
         '	Protected Overridable Sub OnPropertyChanged(ByVal propertyName As String)' + strNewLine +
@@ -146,10 +146,10 @@ begin
     buffer:=TStringList.Create;
     buffer.Text:=Trim(FLines.Text);
     if buffer.Count>0 then begin
-        //ÇåÀí£¬ÒÔ»ñµÃ_var=valueµÄĞÎÊ½
+        //æ¸…ç†ï¼Œä»¥è·å¾—_var=valueçš„å½¢å¼
         bufferLine:=Trim(buffer[0]);
 
-        //»ñÈ¡privateVar,publicPropery
+        //è·å–privateVar,publicPropery
         letPos:=Pos(letOperator,bufferLine);
         if letPos>0 then begin
             privateVar:=Trim(LeftStr(bufferLine,letPos-1));
@@ -159,7 +159,7 @@ begin
             end;
             publicProperty:=UpperCase(LeftStr(publicProperty,1))+RightStr(publicProperty,Length(publicProperty)-1);
 
-            //Êä³ö¸ñÊ½
+            //è¾“å‡ºæ ¼å¼
             FLines.Clear;
             FLines.Add('If ' +privateVar+ ' <> value Then');
             FLines.Add('	' +privateVar + ' = value');
@@ -184,10 +184,10 @@ begin
     buffer:=TStringList.Create;
     buffer.Text:=Trim(FLines.Text);
     if buffer.Count>0 then begin
-        //ÇåÀí£¬ÒÔ»ñµÃ_var=valueµÄĞÎÊ½
+        //æ¸…ç†ï¼Œä»¥è·å¾—_var=valueçš„å½¢å¼
         bufferLine:=Trim(buffer[0]);
 
-        //»ñÈ¡privateVar,publicPropery
+        //è·å–privateVar,publicPropery
         letPos:=Pos(letOperator,bufferLine);
         if letPos>0 then begin
             privateVar:=Trim(LeftStr(bufferLine,letPos-1));
@@ -197,7 +197,7 @@ begin
             end;
             publicProperty:=UpperCase(LeftStr(publicProperty,1))+RightStr(publicProperty,Length(publicProperty)-1);
 
-            //Êä³ö¸ñÊ½
+            //è¾“å‡ºæ ¼å¼
             FLines.Clear;
             FLines.Add('If ' +privateVar+ ' <> value Then');
             FLines.Add('	' +privateVar + ' = value');

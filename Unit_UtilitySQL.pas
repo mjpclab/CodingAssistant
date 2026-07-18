@@ -28,7 +28,7 @@ begin
 end;
 
 function TCodeUtilitySQL.IsEdgeChar(const Value: char): boolean;
-//判断输入的字符是否可以被认为单词边界的分隔符
+//鍒ゆ柇杈撳叆鐨勫瓧绗︽槸鍚﹀彲浠ヨ璁や负鍗曡瘝杈圭晫鐨勫垎闅旂
 const
     EdgeChars:string=#9#32#61#42#43#44#45#46#47#59#40#41#13#10;     //<Tab> =*+,-./;()<Cr><Lf>
 begin

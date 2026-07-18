@@ -60,7 +60,7 @@ begin
             (MidStr(currentLine,Length(CppDefine)+1,1)=SpaceWhite)
             or
             (MidStr(currentLine,Length(CppDefine)+1,1)=SpaceTab)
-        )    //ÕÒµ½ '#define '
+        )    //æ‰¾åˆ° '#define '
         then begin
             Delete(currentLine,1,Length(CppDefine));
             currentLine:=TrimLeft(currentLine);

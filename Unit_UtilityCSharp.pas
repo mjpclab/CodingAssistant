@@ -108,7 +108,7 @@ const
     strNewLine:string=#13#10;
 begin
     FLines.Text:=
-        '#region INotifyPropertyChanged ³ÉÔ±' + strNewLine +
+        '#region INotifyPropertyChanged æˆå‘˜' + strNewLine +
         'public event PropertyChangedEventHandler PropertyChanged;' + strNewLine +
         '' + strNewLine +
         'protected virtual void OnPropertyChanged(string propertyName)' + strNewLine +
@@ -139,7 +139,7 @@ begin
     buffer:=TStringList.Create;
     buffer.Text:=Trim(FLines.Text);
     if buffer.Count>0 then begin
-        //ÇåÀí£¬ÒÔ»ñµÃ_var=valueµÄĞÎÊ½
+        //æ¸…ç†ï¼Œä»¥è·å¾—_var=valueçš„å½¢å¼
         bufferLine:=Trim(buffer[0]);
         if LeftStr(bufferLine,1)=signBlockBegin then begin
             bufferLine:=RightStr(bufferLine,Length(bufferLine)-Length(signBlockBegin));
@@ -154,7 +154,7 @@ begin
             bufferLine:=TrimRight(bufferLine);
         end;
 
-        //»ñÈ¡privateVar,publicPropery
+        //è·å–privateVar,publicPropery
         letPos:=Pos(letOperator,bufferLine);
         if letPos>0 then begin
             privateVar:=Trim(LeftStr(bufferLine,letPos-1));
@@ -164,7 +164,7 @@ begin
             end;
             publicProperty:=UpperCase(LeftStr(publicProperty,1))+RightStr(publicProperty,Length(publicProperty)-1);
 
-            //Êä³ö¸ñÊ½
+            //è¾“å‡ºæ ¼å¼
             FLines.Clear;
             FLines.Add('if (' +privateVar+ ' != value)');
             FLines.Add('{');
@@ -193,7 +193,7 @@ begin
     buffer:=TStringList.Create;
     buffer.Text:=Trim(FLines.Text);
     if buffer.Count>0 then begin
-        //ÇåÀí£¬ÒÔ»ñµÃ_var=valueµÄĞÎÊ½
+        //æ¸…ç†ï¼Œä»¥è·å¾—_var=valueçš„å½¢å¼
         bufferLine:=Trim(buffer[0]);
         if LeftStr(bufferLine,1)=signBlockBegin then begin
             bufferLine:=RightStr(bufferLine,Length(bufferLine)-Length(signBlockBegin));
@@ -208,7 +208,7 @@ begin
             bufferLine:=TrimRight(bufferLine);
         end;
 
-        //»ñÈ¡privateVar,publicPropery
+        //è·å–privateVar,publicPropery
         letPos:=Pos(letOperator,bufferLine);
         if letPos>0 then begin
             privateVar:=Trim(LeftStr(bufferLine,letPos-1));
@@ -218,7 +218,7 @@ begin
             end;
             publicProperty:=UpperCase(LeftStr(publicProperty,1))+RightStr(publicProperty,Length(publicProperty)-1);
 
-            //Êä³ö¸ñÊ½
+            //è¾“å‡ºæ ¼å¼
             FLines.Clear;
             FLines.Add('if (' +privateVar+ ' != value)');
             FLines.Add('{');

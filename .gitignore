@@ -67,3 +67,12 @@ __recovery/
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+
+# Lazarus
+*.lps
+*.compiled
+*.dbg
+lib/
+backup/
+CodingTool
+CodingTool.exe

@@ -1,4 +1,5 @@
 unit Unit_UtilityCSharp;
+{$mode Delphi}{$H+}
 
 interface
 uses SysUtils,Classes,StrUtils;

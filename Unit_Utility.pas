@@ -1,4 +1,5 @@
 unit Unit_Utility;
+{$mode Delphi}{$H+}
 
 interface
 uses SysUtils,Classes,

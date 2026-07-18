@@ -1,4 +1,5 @@
 unit Unit1;
+{$mode Delphi}{$H+}
 
 interface
 

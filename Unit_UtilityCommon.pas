@@ -1,4 +1,5 @@
 unit Unit_UtilityCommon;
+{$mode Delphi}{$H+}
 
 interface
 uses

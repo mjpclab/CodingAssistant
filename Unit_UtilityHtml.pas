@@ -1,4 +1,5 @@
 unit Unit_UtilityHtml;
+{$mode Delphi}{$H+}
 
 interface
 uses Classes;

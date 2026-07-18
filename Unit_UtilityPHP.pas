@@ -1,4 +1,5 @@
 unit Unit_UtilityPHP;
+{$mode Delphi}{$H+}
 
 interface
 uses SysUtils,Classes,StrUtils;

@@ -2,7 +2,7 @@ unit Unit_Utility;
 
 interface
 uses SysUtils,Classes,
-  Unit_UtilityCommon,Unit_UtilitySequence,Unit_UtilitySendKeys,Unit_UtilityCSharp,Unit_UtilityVB,
+  Unit_UtilityCommon,Unit_UtilitySequence,Unit_UtilityCSharp,Unit_UtilityVB,
   Unit_UtilityPascal,Unit_UtilityPHP,Unit_UtilitySQL,Unit_UtilityIe
   ,Unit_UtilityMASM,Unit_UtilityHtml;
 
@@ -12,7 +12,6 @@ type TCodeUtility=class
   public
     Common:TCodeUtilityCommon;
     Sequence:TCodeUtilitySequence;
-    SendKeys:TCodeUtilitySendKeys;
     VB:TCodeUtilityVB;
     CSharp:TCodeUtilityCSharp;
     ObjectPascal:TCodeUtilityPascal;
@@ -38,7 +37,6 @@ begin
     FLines:=theLines;
     Common:=TCodeUtilityCommon.Create(theLines);
     Sequence:=TCodeUtilitySequence.Create(theLines);
-    SendKeys:=TCodeUtilitySendKeys.Create(theLines);
     VB:=TCodeUtilityVB.Create(theLines);
     CSharp:=TCodeUtilityCSharp.Create(theLines);
     ObjectPascal:=TCodeUtilityPascal.Create(theLines);
@@ -54,7 +52,6 @@ begin
     //Free members
     Common.Free;
     Sequence.Free;
-    SendKeys.Free;
     VB.Free;
     CSharp.Free;
     ObjectPascal.Free;

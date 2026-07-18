@@ -393,7 +393,7 @@ var
 implementation
 uses Clipbrd;
 
-{$R *.dfm}
+{$R *.lfm}
 
 {$REGION 'UI'}
     procedure TfrmMain.txtMemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -432,7 +432,7 @@ uses Clipbrd;
 
     procedure TfrmMain.btnSaveAsClick(Sender: TObject);
     begin
-        if dlgSave.Execute(self.Handle) then begin
+        if dlgSave.Execute then begin
             txtMemo.Lines.SaveToFile(dlgSave.FileName);
             dlgOpen.FileName:=dlgSave.FileName;
         end;
@@ -441,7 +441,7 @@ uses Clipbrd;
     procedure TfrmMain.actCopyExecute(Sender: TObject);
     begin
         if txtMemo.SelLength=0 then begin
-            ClipBoard.SetTextBuf(PWideChar(txtMemo.Text));
+            ClipBoard.AsText:=txtMemo.Text;
         end else begin
             txtMemo.CopyToClipboard;
         end;
@@ -455,7 +455,7 @@ uses Clipbrd;
     procedure TfrmMain.actCutExecute(Sender: TObject);
     begin
         if txtMemo.SelLength=0 then begin
-            ClipBoard.SetTextBuf(PWideChar(txtMemo.Text));
+            ClipBoard.AsText:=txtMemo.Text;
             txtMemo.Clear;
         end else begin
             txtMemo.CutToClipboard;

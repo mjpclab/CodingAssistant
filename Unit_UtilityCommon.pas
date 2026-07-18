@@ -595,7 +595,6 @@ end;
 
 procedure TCodeUtilityCommon.CompressSpaces;
 const
-    chrSpace:char=' ';
     chrOtherSpaces:array[0..0] of char=(#9);
 var
     buffer:string;

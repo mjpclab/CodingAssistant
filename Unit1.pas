@@ -404,6 +404,20 @@ uses Clipbrd;
     procedure TfrmMain.txtMemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     begin
         if (ssCtrl in Shift) and (Key=Ord('A')) then txtMemo.SelectAll;
+        {$IFDEF WINDOWS}
+        //Windows only: the native Win32 edit control ignores a lone LF and
+        //collapses Unix/Mac clipboard text onto one line, so intercept Ctrl+V
+        //and normalise line endings first (AdjustLineBreaks -> CRLF in a single
+        //pass). Key:=0 swallows the key so the control's own paste doesn't also
+        //run. Other widgetsets treat a lone LF as a break, so there we let the
+        //native Ctrl+V handle it. The popup-menu and toolbar paths funnel
+        //through actPasteExecute, which applies the same guard.
+        if (ssCtrl in Shift) and (Key=Ord('V')) then
+        begin
+            txtMemo.SelText:=AdjustLineBreaks(Clipboard.AsText);
+            Key:=0;
+        end;
+        {$ENDIF}
     end;
 
     procedure TfrmMain.txtMemoKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -469,7 +483,12 @@ uses Clipbrd;
 
     procedure TfrmMain.actPasteExecute(Sender: TObject);
     begin
+        {$IFDEF WINDOWS}
+        //Normalise line endings on paste (see txtMemoKeyDown for the rationale).
+        txtMemo.SelText:=AdjustLineBreaks(Clipboard.AsText);
+        {$ELSE}
         txtMemo.PasteFromClipboard;
+        {$ENDIF}
     end;
 
     procedure TfrmMain.btnClearClick(Sender: TObject);

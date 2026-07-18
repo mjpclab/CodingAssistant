@@ -379,9 +379,14 @@ type
     procedure btnSeqRepeatCountClick(Sender: TObject);
     procedure btnSortClick(Sender: TObject);
   private
-    Tool:TCodeUtility;
+    FTool:TCodeUtility;
+    function GetTool:TCodeUtility;
     procedure GetCursorPosition(const txt:TCustomMemo;out rowNum,colNum:integer);
     procedure RefreshMemoPosition;
+    //In LCL a TMemo's Lines object is recreated when its handle is (re)allocated,
+    //so a reference cached at FormCreate dangles once the form is shown. Always
+    //rebind Tool to the memo's current Lines before use.
+    property Tool:TCodeUtility read GetTool;
     { Private declarations }
   public
     { Public declarations }
@@ -526,13 +531,20 @@ uses Clipbrd;
 {$REGION 'Tool''s Life Cycle'}
     procedure TfrmMain.FormCreate(Sender: TObject);
     begin
-        Tool:=TCodeUtility.Create(txtMemo.Lines);
+        FTool:=TCodeUtility.Create(txtMemo.Lines);
         edtSeqTemplate.Text:=TrimRight(edtSeqTemplate.Text);     //remove the end new empty line
     end;
-    
+
+    function TfrmMain.GetTool:TCodeUtility;
+    begin
+        //Rebind to the memo's current Lines (LCL recreates it on handle changes).
+        FTool.Lines:=txtMemo.Lines;
+        Result:=FTool;
+    end;
+
     procedure TfrmMain.FormDestroy(Sender: TObject);
     begin
-        Tool.Free;
+        FTool.Free;
     end;
 {$ENDREGION}
 

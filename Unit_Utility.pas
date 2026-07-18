@@ -23,7 +23,8 @@ type TCodeUtility=class
 
     constructor Create(theLines: TStrings);
     destructor Destroy;override;
-    property Lines:TStrings read FLines write FLines;
+    procedure SetLines(theLines:TStrings);
+    property Lines:TStrings read FLines write SetLines;
  end;
 implementation
 
@@ -45,6 +46,24 @@ begin
     IE:=TCodeUtilityIE.Create(theLines);
     HTML:=TCodeUtilityHTML.Create(theLines);
     MASM:=TCodeUtilityMASM.Create(theLines);
+end;
+
+procedure TCodeUtility.SetLines(theLines: TStrings);
+begin
+    //Propagate the current TStrings to every sub-utility. Needed because LCL
+    //recreates a TMemo's Lines object when its handle is (re)allocated, so the
+    //reference captured at construction time can become stale.
+    FLines:=theLines;
+    Common.Lines:=theLines;
+    Sequence.Lines:=theLines;
+    VB.Lines:=theLines;
+    CSharp.Lines:=theLines;
+    ObjectPascal.Lines:=theLines;
+    PHP.Lines:=theLines;
+    SQL.Lines:=theLines;
+    IE.Lines:=theLines;
+    HTML.Lines:=theLines;
+    MASM.Lines:=theLines;
 end;
 
 destructor TCodeUtility.Destroy;

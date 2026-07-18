@@ -47,7 +47,6 @@ type TCodeUtilityCommon=class
     procedure DeleteEmptyLine(const IncludeWhiteSpaceLine:boolean);
     procedure CompactEmptyLine(const IncludeWhiteSpaceLine:boolean);
     procedure Replace(const strFrom:string; const strTo:string);
-    //procedure SendKeyPress(const IsPureText:Boolean);
     procedure SortLines;
     procedure ReverseLines;
 
@@ -368,23 +367,6 @@ procedure TCodeUtilityCommon.InsertAfterString(const find, input: string);
 begin
     FLines.Text:=StringReplace(FLines.Text,find,find+input,[rfReplaceAll]);
 end;
-
-{
-procedure TCodeUtilityCommon.SendKeyPress(const IsPureText:Boolean);
-const
-    strReturn:string=#13#10;
-    strEnter:string=#13;
-
-var
-    Buffer:string;
-begin
-    if Length(FLines.Text)>0 then begin
-        //Get Buffer
-        Buffer:=StringReplace(FLines.Text,strReturn,strEnter,[rfReplaceAll]);
-        SendKeys(Buffer,false,IsPureText);
-    end;
-end;
-}
 
 procedure TCodeUtilityCommon.SplitLines(const Separator: string; const ReserveSeparator: integer);
 const

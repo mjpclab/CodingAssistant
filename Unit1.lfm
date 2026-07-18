@@ -125,15 +125,10 @@ object frmMain: TfrmMain
     6F1C124B97967B76757678090C45797678702E92939500000000000000000000
     0000000000000000000000000000000000000000000000000000000000000000
     00000000000000000000000000000000000000000000}
-  OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  DesignSize = (
-    964
-    601)
   PixelsPerInch = 96
-  TextHeight = 12
   object barTools: TToolBar
     Left = 0
     Top = 0
@@ -275,14 +270,12 @@ object frmMain: TfrmMain
     Width = 964
     Height = 320
     Align = alClient
-    Ctl3D = True
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
     Font.Name = 'Consolas'
     Font.Style = []
     HideSelection = False
-    ParentCtl3D = False
     ParentFont = False
     PopupMenu = mnuPopup
     ScrollBars = ssBoth
@@ -301,9 +294,6 @@ object frmMain: TfrmMain
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 2
-    DesignSize = (
-      964
-      256)
     object pageTabs: TPageControl
       Left = 8
       Top = 10
@@ -327,10 +317,8 @@ object frmMain: TfrmMain
           Top = 36
           Width = 100
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = 1
-          ParentCtl3D = False
           TabOrder = 4
           Value = 1
         end
@@ -376,9 +364,8 @@ object frmMain: TfrmMain
           Top = 94
           Width = 73
           Height = 45
-          Caption = #21024#31526#21495#20043#21069' ('#27491#21521#26597#25214')'
+          Caption = #21024#31526#21495#20043#21069#13#10'('#27491#21521#26597#25214')'
           TabOrder = 14
-          WordWrap = True
           OnClick = btnDeleteBeforeStringLookForwardClick
         end
         object btnDelNPrefix: TButton
@@ -429,10 +416,8 @@ object frmMain: TfrmMain
           Top = 36
           Width = 100
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = 1
-          ParentCtl3D = False
           TabOrder = 6
           Value = 1
         end
@@ -448,9 +433,8 @@ object frmMain: TfrmMain
           Top = 145
           Width = 73
           Height = 45
-          Caption = #21024#31526#21495#20043#21518' ('#36127#21521#26597#25214')'
+          Caption = #21024#31526#21495#20043#21518#13#10'('#36127#21521#26597#25214')'
           TabOrder = 23
-          WordWrap = True
           OnClick = btnDeleteAfterStringLookBackwardClick
         end
         object edtMergeLines: TEdit
@@ -786,9 +770,8 @@ object frmMain: TfrmMain
           Top = 145
           Width = 73
           Height = 45
-          Caption = #21024#31526#21495#20043#21069' ('#36127#21521#26597#25214')'
+          Caption = #21024#31526#21495#20043#21069#13#10'('#36127#21521#26597#25214')'
           TabOrder = 20
-          WordWrap = True
           OnClick = btnDeleteBeforeStringLookBackwardClick
         end
         object edtDeleteAfterStringLookForward: TEdit
@@ -813,9 +796,8 @@ object frmMain: TfrmMain
           Top = 96
           Width = 73
           Height = 45
-          Caption = #21024#31526#21495#20043#21518' ('#27491#21521#26597#25214')'
+          Caption = #21024#31526#21495#20043#21518#13#10'('#27491#21521#26597#25214')'
           TabOrder = 17
-          WordWrap = True
           OnClick = btnDeleteAfterStringLookForwardClick
         end
         object btnRepeatEachLine: TButton
@@ -841,10 +823,8 @@ object frmMain: TfrmMain
           Top = 127
           Width = 55
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = 1
-          ParentCtl3D = False
           TabOrder = 38
           Value = 1
         end
@@ -853,10 +833,8 @@ object frmMain: TfrmMain
           Top = 127
           Width = 55
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = 1
-          ParentCtl3D = False
           TabOrder = 40
           Value = 1
         end
@@ -1293,9 +1271,6 @@ object frmMain: TfrmMain
       object TabSheet8: TTabSheet
         Caption = #36890#29992'3'
         ImageIndex = 2
-        DesignSize = (
-          939
-          212)
         object lblMemoExchange: TLabel
           Left = 804
           Top = 164
@@ -1307,7 +1282,6 @@ object frmMain: TfrmMain
           Caption = #8593#8595
           Layout = tlCenter
           OnClick = lblMemoExchangeClick
-          ExplicitTop = 167
         end
         object edtEachLine: TMemo
           Left = 3
@@ -1406,9 +1380,6 @@ object frmMain: TfrmMain
       object TabSheet9: TTabSheet
         Caption = #36882#22686#24207#21015
         ImageIndex = 12
-        DesignSize = (
-          939
-          212)
         object lblSeqPlaceHolder: TLabel
           Left = 13
           Top = 24
@@ -1463,10 +1434,8 @@ object frmMain: TfrmMain
           Top = 120
           Width = 67
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = -2147483648
-          ParentCtl3D = False
           TabOrder = 2
           Value = 1
         end
@@ -1475,10 +1444,8 @@ object frmMain: TfrmMain
           Top = 109
           Width = 71
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = -2147483648
-          ParentCtl3D = False
           TabOrder = 4
           Value = 1
         end
@@ -1487,10 +1454,8 @@ object frmMain: TfrmMain
           Top = 120
           Width = 55
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = -2147483648
-          ParentCtl3D = False
           TabOrder = 3
           Value = 1
         end
@@ -1499,10 +1464,8 @@ object frmMain: TfrmMain
           Top = 155
           Width = 71
           Height = 21
-          Ctl3D = True
           MaxValue = 2147483647
           MinValue = 1
-          ParentCtl3D = False
           TabOrder = 6
           Value = 1
         end
@@ -1546,89 +1509,10 @@ object frmMain: TfrmMain
           Width = 626
           Height = 188
           Anchors = [akLeft, akTop, akRight, akBottom]
-          Ctl3D = True
           Lines.Strings = (
             '%')
-          ParentCtl3D = False
           ScrollBars = ssBoth
           TabOrder = 8
-        end
-      end
-      object tabSendkeys: TTabSheet
-        Caption = #25353#38190#21457#36865
-        ImageIndex = 11
-        object lblSendInform: TLabel
-          Left = 255
-          Top = 40
-          Width = 18
-          Height = 12
-          Caption = '...'
-        end
-        object numSendKeysWait: TSpinEdit
-          Left = 34
-          Top = 38
-          Width = 57
-          Height = 21
-          Ctl3D = True
-          MaxValue = 2147483647
-          MinValue = 1
-          ParentCtl3D = False
-          TabOrder = 1
-          Value = 3
-        end
-        object btnSendKeysWait: TButton
-          Left = 89
-          Top = 35
-          Width = 99
-          Height = 25
-          Caption = #20934#22791#21457#36865
-          TabOrder = 0
-          OnClick = btnSendKeysWaitClick
-        end
-        object chkSendKeysPureTextOnly: TCheckBox
-          Left = 34
-          Top = 66
-          Width = 154
-          Height = 17
-          Caption = #20165#25353#32431#25991#26412#21457#36865
-          Checked = True
-          State = cbChecked
-          TabOrder = 2
-        end
-        object chkSendKeysByLine: TCheckBox
-          Left = 34
-          Top = 89
-          Width = 91
-          Height = 17
-          Caption = #25353#34892#21457#36865
-          TabOrder = 4
-        end
-        object numSendKeysByLine: TSpinEdit
-          Left = 131
-          Top = 87
-          Width = 57
-          Height = 21
-          Ctl3D = True
-          MaxValue = 2147483647
-          MinValue = 1
-          ParentCtl3D = False
-          TabOrder = 3
-          Value = 1
-        end
-        object drpSendKeysSourceRange: TComboBox
-          Left = 34
-          Top = 114
-          Width = 154
-          Height = 20
-          Style = csDropDownList
-          ItemIndex = 3
-          TabOrder = 5
-          Text = #36873#20013#30340#25110#20840#37096
-          Items.Strings = (
-            #20840#37096
-            #24403#21069#34892
-            #36873#20013#30340#20869#23481
-            #36873#20013#30340#25110#20840#37096)
         end
       end
       object TabSheet5: TTabSheet
@@ -2625,11 +2509,9 @@ object frmMain: TfrmMain
       C01FFC1F80018001FFFFFE3FFFFFFFFF00000000000000000000000000000000
       000000000000}
   end
-  object actPopup: TActionManager
-    Images = imgTools
+  object actPopup: TActionList
     Left = 296
     Top = 392
-    StyleName = 'XP Style'
     object actCopy: TAction
       Caption = #22797#21046'(&C)'
       Hint = #22797#21046
@@ -2669,9 +2551,7 @@ object frmMain: TfrmMain
       OnExecute = actCopyTabExecute
     end
   end
-  object mnuPopup: TPopupActionBar
-    AutoHotkeys = maManual
-    Images = imgTools
+  object mnuPopup: TPopupMenu
     Left = 344
     Top = 392
     object N1: TMenuItem
@@ -2692,11 +2572,5 @@ object frmMain: TfrmMain
     object N6: TMenuItem
       Action = actClear
     end
-  end
-  object timSendKeys: TTimer
-    Enabled = False
-    OnTimer = timSendKeysTimer
-    Left = 432
-    Top = 392
   end
 end

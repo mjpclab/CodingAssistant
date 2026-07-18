@@ -3,12 +3,9 @@ unit Unit1;
 interface
 
 uses
-
-  Windows, ShellAPI, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls,  ComCtrls,
-  Unit_Utility, ImgList, Buttons, ToolWin, XPStyleActnCtrls, ActnList, ActnMan,
-  Menus, ActnPopup, Spin, PlatformDefaultStyleActnCtrls, System.Actions,
-  System.ImageList;
+  LCLIntf, LCLType, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, ComCtrls,
+  Unit_Utility, ImgList, Buttons, ActnList, Menus, Spin;
 
 
 type
@@ -54,8 +51,8 @@ type
     btnSaveAs: TToolButton;
     imgTools: TImageList;
     pnlTitle: TPanel;
-    actPopup: TActionManager;
-    mnuPopup: TPopupActionBar;
+    actPopup: TActionList;
+    mnuPopup: TPopupMenu;
     actCopy: TAction;
     actCut: TAction;
     actPaste: TAction;
@@ -72,7 +69,6 @@ type
     edtReplaceFrom: TEdit;
     edtReplaceTo: TEdit;
     btnReplace: TButton;
-    timSendKeys: TTimer;
     TabSheet5: TTabSheet;
     btnCSCombineString: TButton;
     btnCSCancelCombineString: TButton;
@@ -222,14 +218,6 @@ type
     btnHtmlUnescape: TButton;
     btnHtmlUnHtml: TButton;
     btnHtmlUnBBCode: TButton;
-    tabSendkeys: TTabSheet;
-    numSendKeysWait: TSpinEdit;
-    btnSendKeysWait: TButton;
-    chkSendKeysPureTextOnly: TCheckBox;
-    chkSendKeysByLine: TCheckBox;
-    numSendKeysByLine: TSpinEdit;
-    drpSendKeysSourceRange: TComboBox;
-    lblSendInform: TLabel;
     edtRepeatHorz: TEdit;
     btnRepeatHorz: TButton;
     numRepeatHorz: TSpinEdit;
@@ -306,8 +294,6 @@ type
     procedure btnDelNPrefixClick(Sender: TObject);
     procedure btnDelNSuffixClick(Sender: TObject);
     procedure btnDeleteEmptyLineClick(Sender: TObject);
-    procedure btnSendKeysWaitClick(Sender: TObject);
-    procedure timSendKeysTimer(Sender: TObject);
     procedure pnlTitleClick(Sender: TObject);
     procedure btnCSCombineStringClick(Sender: TObject);
     procedure btnCSCancelCombineStringClick(Sender: TObject);
@@ -394,7 +380,7 @@ type
     procedure btnSortClick(Sender: TObject);
   private
     Tool:TCodeUtility;
-    procedure GetCursorPosition(const txt:TCustomEdit;out rowNum,colNum:integer);
+    procedure GetCursorPosition(const txt:TCustomMemo;out rowNum,colNum:integer);
     procedure RefreshMemoPosition;
     { Private declarations }
   public
@@ -410,66 +396,6 @@ uses Clipbrd;
 {$R *.dfm}
 
 {$REGION 'UI'}
-    procedure TfrmMain.btnSendKeysWaitClick(Sender: TObject);
-    begin
-        with timSendKeys do begin
-            Tag:=numSendKeysWait.Value;
-            Interval:=1;                    //使timer立即开始
-            Enabled:=true;
-        end;
-    end;
-
-    procedure TfrmMain.timSendKeysTimer(Sender: TObject);
-    const
-        strWaittingSend:string='%d 秒后发送字符串';
-    var
-        buffer:string;
-        rowNum,colNum:Integer;
-    begin
-        with timSendKeys do begin
-            if Interval=1 then Interval:=MSecsPerSec;      //切换到以秒为单位计时
-            if Tag<>0 then begin
-                lblSendInform.Caption:=Format(strWaittingSend,[Tag]);
-                Tag:=Tag-1;
-            end else begin
-                Enabled:=false;
-                lblSendInform.Caption:=EmptyStr;
-
-                case drpSendKeysSourceRange.ItemIndex of
-                0:  //全部
-                    begin
-                        buffer:=txtMemo.Text;
-                    end;
-                1:  //当前行
-                    begin
-                        GetCursorPosition(txtMemo,rowNum,colNum);
-                        buffer:=txtMemo.Lines[rowNum-1];
-                    end;
-                2:  //选中的行
-                    begin
-                        buffer:=txtMemo.SelText;
-                    end;
-                3:  //选中的或全部
-                    begin
-                        if txtMemo.SelLength>0 then begin
-                            buffer:=txtMemo.SelText;
-                        end else begin
-                            buffer:=txtMemo.Text;
-                        end;
-                    end
-                end;
-
-                with Tool.SendKeys do begin
-                    IsPureText:=chkSendKeysPureTextOnly.Checked;
-                    SendByLines:=chkSendKeysByLine.Checked;
-                    Delay:=numSendKeysByLine.Value;
-                    SendKeys(buffer);
-                end;
-            end;
-
-        end;
-    end;
-
     procedure TfrmMain.txtMemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     begin
         if (ssCtrl in Shift) and (Key=Ord('A')) then txtMemo.SelectAll;
@@ -553,7 +479,7 @@ uses Clipbrd;
 
     procedure TfrmMain.pnlTitleClick(Sender: TObject);
     begin
-        shellexecute(self.Handle,'open','http://mjpclab.net/',nil,nil,sw_shownormal);
+        OpenURL('http://mjpclab.net/');
     end;
 
     procedure TfrmMain.lblReplaceExchangeClick(Sender: TObject);
@@ -580,10 +506,10 @@ uses Clipbrd;
 
     end;
 
-    procedure TfrmMain.GetCursorPosition(const txt: TCustomEdit; out rowNum,colNum: integer);
+    procedure TfrmMain.GetCursorPosition(const txt: TCustomMemo; out rowNum,colNum: integer);
     begin
-        rowNum := SendMessage(txt.Handle, EM_LINEFROMCHAR, txt.SelStart, 0) +1;
-        colNum := txt.SelStart - SendMessage(txt.Handle, EM_LINEINDEX, -1, 0) +1;
+        rowNum := txt.CaretPos.Y + 1;
+        colNum := txt.CaretPos.X + 1;
     end;
 
     procedure TfrmMain.RefreshMemoPosition;

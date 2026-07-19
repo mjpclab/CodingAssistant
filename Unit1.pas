@@ -524,7 +524,7 @@ uses Clipbrd;
     procedure TfrmMain.actStayOnTopExecute(Sender: TObject);
     begin
         if btnStayOnTop.Down then begin
-            self.FormStyle:=fsStayOnTop;
+            self.FormStyle:=fsSystemStayOnTop;
         end else begin
             self.FormStyle:=fsNormal;
         end;

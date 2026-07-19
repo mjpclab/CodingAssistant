@@ -11,7 +11,7 @@ type TCodeUtilityPHP=class
     const SignDoubleQuote='"';
     const SignStrConcat=' .';
     const SignHereDoc='<<<';
-    const strNewLine:string=#13#10;
+    const strNewLine:string=LineEnding;
 
     procedure CombineToStringExpression(const quoteChar:char);
     procedure CancelCombineStringExpression(const quoteChar:char);

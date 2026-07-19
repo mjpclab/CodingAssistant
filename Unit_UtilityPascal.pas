@@ -111,7 +111,7 @@ end;
 
 procedure TCodeUtilityPascal.CompletePropertyFromPublicDeclaration(const privateMemberPrefix:string);
 const
-    strNewLine:string=#13#10;
+    strNewLine:string=LineEnding;
     spaceChar:char=' ';
     tabChar:char=#9;
 var
@@ -166,7 +166,7 @@ end;
 
 procedure TCodeUtilityPascal.CompletePropertyFromPrivateDeclaration(const privateMemberPrefix: string);
 const
-    strNewLine:string=#13#10;
+    strNewLine:string=LineEnding;
     spaceChar:char=' ';
     tabChar:char=#9;
 var

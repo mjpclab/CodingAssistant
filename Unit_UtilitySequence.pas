@@ -6,8 +6,8 @@ uses SysUtils,Classes,StrUtils;
 
 type TCodeUtilitySequence=class
   private const
-	newLine:string=#13#10;
-    doubleNewLine:string=#13#10#13#10;
+	newLine:string=LineEnding;
+    doubleNewLine:string=LineEnding+LineEnding;
   private
     FLines:TStrings;
   public

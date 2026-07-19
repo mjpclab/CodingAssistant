@@ -106,7 +106,7 @@ end;
 
 procedure TCodeUtilityCSharp.GeneratePropertyChanged;
 const
-    strNewLine:string=#13#10;
+    strNewLine:string=LineEnding;
 begin
     FLines.Text:=
         '#region INotifyPropertyChanged 成员' + strNewLine +

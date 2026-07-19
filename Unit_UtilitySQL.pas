@@ -38,7 +38,7 @@ end;
 
 procedure TCodeUtilitySQL.AdjustWrapBySyntax;
 const
-    WrapStr:string=#13#10;
+    WrapStr:string=LineEnding;
     KeyWords:array[0..23] of string=(
         'SELECT','INSERT','VALUES','FROM','WHERE','GROUP','HAVING','ORDER'
         ,'LEFT JOIN','RIGHT JOIN','LEFT OUTER JOIN','RIGHT OUTER JOIN'
@@ -130,7 +130,7 @@ end;
 procedure TCodeUtilitySQL.CombineToEnumeration;
 const
     chrComma:char=',';
-    strReturn:string=#13#10;
+    strReturn:string=LineEnding;
 begin
     with FLines do begin
         Text:=Trim(Text);
@@ -142,7 +142,7 @@ procedure TCodeUtilitySQL.CombineToQuotedEnumeration;
 const
     chrComma:char=',';
     chrQuote:char='''';
-    strReturn:string=#13#10;
+    strReturn:string=LineEnding;
 begin
     with FLines do begin
         Text:=Trim(Text);
@@ -156,7 +156,7 @@ end;
 procedure TCodeUtilitySQL.CancelCombineEnumeration;
 const
     strSeparator:string=',';
-    strReturn:string=#13#10;
+    strReturn:string=LineEnding;
 begin
     with FLines do begin
          Text:=StringReplace(Text,strSeparator,strReturn,[rfReplaceAll]);
@@ -167,7 +167,7 @@ procedure TCodeUtilitySQL.CancelCombineQuotedEnumeration;
 const
     chrQuote='''';
     strSeparator:string=''',''';
-    strReturn:string=#13#10;
+    strReturn:string=LineEnding;
 begin
     with FLines do begin
         if Length(Text)>=Length(chrQuote) then begin

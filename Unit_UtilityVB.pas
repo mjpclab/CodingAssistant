@@ -108,7 +108,7 @@ end;
 
 procedure TCodeUtilityVB.GenerateClassicPropertyDeclaration(const propertyName, typeName: string);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 begin
     FLines.Text:=
         'Public Property Get ' +propertyName+ '() As ' + typeName + newLine +
@@ -121,7 +121,7 @@ end;
 
 procedure TCodeUtilityVB.GeneratePropertyChanged;
 const
-    strNewLine:string=#13#10;
+    strNewLine:string=LineEnding;
 begin
     FLines.Text:=
         '#Region "INotifyPropertyChanged 成员"' + strNewLine +

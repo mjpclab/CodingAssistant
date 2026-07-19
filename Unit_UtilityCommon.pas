@@ -146,7 +146,7 @@ end;
 {Public}
 procedure TCodeUtilityCommon.AddPrefix(const Value: string);
 const
-    strReturn:string=#13#10;
+    strReturn:string=LineEnding;
 var
     //i:integer;
     EndWithNewLine:boolean;
@@ -166,7 +166,7 @@ end;
 
 procedure TCodeUtilityCommon.AddPostfix(const Value: string);
 const
-    strReturn:string=#13#10;
+    strReturn:string=LineEnding;
 var
     //i:integer;
     EndWithNewLine:boolean;
@@ -377,7 +377,7 @@ var
     ReplacedString:string;
 begin
     if Separator<>EmptyStr then begin
-        ReplacedString:=#13#10;
+        ReplacedString:=LineEnding;
         if ReserveSeparator=PreservePrefix then begin             //保留为前缀分隔符
             ReplacedString:=ReplacedString+Separator;
         end else if ReserveSeparator=PreservePostfix then begin   //保留为后缀分隔符
@@ -394,7 +394,7 @@ procedure TCodeUtilityCommon.MergeLines(const Separator: string);
 var
     ReturnString:string;
 begin
-    ReturnString:=#13#10;
+    ReturnString:=LineEnding;
     with FLines do begin
         Text:=StringReplace(Text,ReturnString,Separator,[rfReplaceAll]);
     end;
@@ -430,7 +430,7 @@ end;}
 procedure TCodeUtilityCommon.ExchangeLetOperatorSide(const separator: string);
 const
     sentenceTerminator:char=';';
-    strNewLine:string=#13#10;
+    strNewLine:string=LineEnding;
     spaceChar:char=' ';
     tabChar:char=#9;
 var
@@ -612,7 +612,7 @@ end;
 
 procedure TCodeUtilityCommon.DeleteEmptyLine(const IncludeWhiteSpaceLine: boolean);
 const
-    strReturn=#13#10;
+    strReturn=LineEnding;
 var
     buffer,currentLine:string;
     i:Integer;
@@ -632,7 +632,7 @@ end;
 
 procedure TCodeUtilityCommon.CompactEmptyLine(const IncludeWhiteSpaceLine: boolean);
 const
-    strReturn=#13#10;
+    strReturn=LineEnding;
 var
     buffer,currentLine:string;
     i:Integer;
@@ -690,7 +690,7 @@ end;
 
 procedure TCodeUtilityCommon.InsertString(const index: Integer; const content: string);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer:string;
     currentLine:string;
@@ -710,7 +710,7 @@ end;
 procedure TCodeUtilityCommon.RInsertString(const rIndex: Integer;
   const content: string);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer:string;
     currentLine:string;
@@ -729,7 +729,7 @@ end;
 
 procedure TCodeUtilityCommon.DeleteString(const start, count: integer);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer:string;
     currentLine:string;
@@ -748,7 +748,7 @@ end;
 
 procedure TCodeUtilityCommon.RDeleteString(const rStart, rCount: integer);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer:string;
     currentLine:string;
@@ -778,7 +778,7 @@ end;
 
 procedure TCodeUtilityCommon.ExtractString(const start, count: integer);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer:string;
     currentLine:string;
@@ -796,7 +796,7 @@ end;
 
 procedure TCodeUtilityCommon.RExtractString(const rStart, rCount: integer);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer:string;
     currentLine:string;
@@ -824,7 +824,7 @@ end;
 
 procedure TCodeUtilityCommon.ReplaceEachLine(const outerLines: TStrings; find: string);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     oldBuffer,replacementBuffer:TStrings;
     minLines:integer;
@@ -854,7 +854,7 @@ end;
 
 procedure TCodeUtilityCommon.JoinBeforeEachLine(const outerLines: TStrings);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer1,buffer2:TStrings;
     maxLines:integer;
@@ -887,7 +887,7 @@ end;
 
 procedure TCodeUtilityCommon.JoinAfterEachLine(const outerLines: TStrings);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     buffer1,buffer2:TStrings;
     maxLines:integer;
@@ -920,7 +920,7 @@ end;
 
 procedure TCodeUtilityCommon.CrossInsertBeforeEachLine(const outerLines: TStrings);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     maxLines:integer;
     i:integer;
@@ -943,7 +943,7 @@ end;
 
 procedure TCodeUtilityCommon.CrossInsertAfterEachLine(const outerLines: TStrings);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     maxLines:integer;
     i:integer;
@@ -966,7 +966,7 @@ end;
 
 procedure TCodeUtilityCommon.CircuCrossInsertBeforeEachLine(const outerLines: TStrings);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     iLine,iOuter:Integer;
     buffer:string;
@@ -986,7 +986,7 @@ end;
 
 procedure TCodeUtilityCommon.CircuCrossInsertAfterEachLine(const outerLines: TStrings);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
     iLine,iOuter:Integer;
     buffer:string;
@@ -1027,7 +1027,7 @@ end;
 
 procedure TCodeUtilityCommon.RepeatEachLine(const count: Integer);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
 	buffer,currentLineString:string;
     i:integer;
@@ -1043,7 +1043,7 @@ end;
 
 procedure TCodeUtilityCommon.RepeatAllLines(const count: Integer);
 const
-    newLine:string=#13#10;
+    newLine:string=LineEnding;
 var
 	buffer,bufferOriginal:string;
     i:integer;

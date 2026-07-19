@@ -1,0 +1,276 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# 升级 Lazarus 需同步各安装步骤里的包文件名（内嵌 FPC 版本号命名不规则，无法完全参数化）。
+env:
+  LAZ_VER: "4.8"
+  SF: "https://downloads.sourceforge.net/project/lazarus"
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-x64
+            runs-on: windows-latest
+            cpu: x86_64
+            target-os: win64
+            widgetset: win32
+            bin: CodingTool.exe
+
+          - name: windows-x86
+            runs-on: windows-latest
+            cpu: i386
+            target-os: win32
+            widgetset: win32
+            bin: CodingTool.exe
+
+          - name: linux-amd64
+            runs-on: ubuntu-latest
+            cpu: x86_64
+            target-os: linux
+            widgetset: gtk2
+            bin: CodingTool
+
+          - name: linux-arm64
+            runs-on: ubuntu-24.04-arm
+            cpu: aarch64
+            target-os: linux
+            widgetset: gtk2
+            bin: CodingTool
+
+          - name: macos-x64
+            runs-on: macos-15-intel
+            cpu: x86_64
+            target-os: darwin
+            widgetset: cocoa
+            bin: CodingTool
+
+          # FPC 3.2.x 的 aarch64 链接需要 Xcode 15 的 classic linker（Xcode 16 全系已移除），故用 macos-14。
+          - name: macos-arm64
+            runs-on: macos-14
+            cpu: aarch64
+            target-os: darwin
+            widgetset: cocoa
+            bin: CodingTool
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Resolve version
+        id: ver
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "version=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=dev-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Lazarus (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          CPU: ${{ matrix.cpu }}
+        run: |
+          $ErrorActionPreference = "Stop"
+          $base = "$env:SF/Lazarus%20Windows%2064%20bits/Lazarus%20$env:LAZ_VER"
+          $silent = @("/VERYSILENT","/SP-","/NORESTART","/DIR=C:\Lazarus")
+          curl.exe -fSL -o "$env:RUNNER_TEMP\laz.exe" "$base/lazarus-$env:LAZ_VER-fpc-3.2.2-win64.exe"
+          Start-Process -Wait -FilePath "$env:RUNNER_TEMP\laz.exe" -ArgumentList $silent
+          # 32 位目标在 win64 工具链上叠加 i386-win32 交叉编译 add-on。
+          if ($env:CPU -eq "i386") {
+            curl.exe -fSL -o "$env:RUNNER_TEMP\cross.exe" "$base/lazarus-$env:LAZ_VER-fpc-3.2.2-cross-i386-win32-win64.exe"
+            Start-Process -Wait -FilePath "$env:RUNNER_TEMP\cross.exe" -ArgumentList $silent
+          }
+          Add-Content -Path $env:GITHUB_PATH -Value "C:\Lazarus"
+
+      - name: Install Lazarus (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        env:
+          CPU: ${{ matrix.cpu }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          if [[ "$CPU" == "aarch64" ]]; then
+            folder="Lazarus%20Linux%20arm64%20DEB"
+            fpclaz="fpc-laz_3.2.3-240813_arm64.deb"
+            fpcsrc="fpc-src_3.2.3-240813_arm64.deb"
+            proj="lazarus-project_4.8.0-0_arm64.deb"
+          else
+            folder="Lazarus%20Linux%20amd64%20DEB"
+            fpclaz="fpc-laz_3.2.2-210709_amd64.deb"
+            fpcsrc="fpc-src_3.2.2-210709_amd64.deb"
+            proj="lazarus-project_4.8.0-0_amd64.deb"
+          fi
+          base="$SF/$folder/Lazarus%20$LAZ_VER"
+          for f in "$fpclaz" "$fpcsrc" "$proj"; do
+            curl -fSL -o "$f" "$base/$f"
+          done
+          # 用 apt 安装 .deb 以自动解决 gtk2/gdb 等依赖（dpkg -i 不会）。
+          sudo apt-get install -y "./$fpclaz" "./$fpcsrc" "./$proj"
+          lazbuild --version
+
+      - name: Install Lazarus (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          CPU: ${{ matrix.cpu }}
+        run: |
+          set -euo pipefail
+          # macos-15(Intel) 默认 Xcode 16.4；切到已预装的 16.2 链接器（验证可用）。macos-14 无此目录，跳过用自带 Xcode 15。
+          XC="/Applications/Xcode_16.2.app/Contents/Developer"
+          if [[ -d "$XC" ]]; then
+            sudo xcode-select -s "$XC"
+            echo "DEVELOPER_DIR=$XC" >> "$GITHUB_ENV"
+          fi
+          if [[ "$CPU" == "aarch64" ]]; then
+            folder="Lazarus%20macOS%20aarch64"; lazzip="lazarus-darwin-aarch64-${LAZ_VER}.zip"
+          else
+            folder="Lazarus%20macOS%20x86-64"; lazzip="lazarus-darwin-x86_64-${LAZ_VER}.zip"
+          fi
+          base="$SF/$folder/Lazarus%20$LAZ_VER"
+          # dmg 内的 FPC 为 intel+arm64 universal，两架构共用。
+          curl -fSL -o fpc.dmg "$base/fpc-3.2.4rc1a.intelarm64-macosx.dmg"
+          curl -fSL -o laz.zip "$base/$lazzip"
+          hdiutil attach fpc.dmg -nobrowse -mountpoint /tmp/fpcdmg
+          find /tmp/fpcdmg -name '*.pkg' -exec sudo installer -pkg {} -target / \;
+          hdiutil detach /tmp/fpcdmg
+          # 去除下载文件的隔离属性，否则解压出的内容无法执行。
+          xattr -cr laz.zip || true
+          mkdir -p "$HOME/laz"
+          unzip -q laz.zip -d "$HOME/laz"
+          lb="$(find "$HOME/laz" -name lazbuild -type f | head -1)"
+          if [[ -z "$lb" ]]; then echo "lazbuild not found in zip"; exit 1; fi
+          # lazbuild 内置 LazarusDir 默认指向 /Developer/lazarus，需覆盖为其真实所在目录（Lazarus 根）。
+          lazdir="$(dirname "$lb")"
+          chmod +x "$lb"
+          echo "$lazdir" >> "$GITHUB_PATH"
+          echo "LAZARUS_DIR=$lazdir" >> "$GITHUB_ENV"
+          "$lb" --lazarusdir="$lazdir" --version
+
+      - name: Build
+        shell: bash
+        # Release 选项：-g- 关调试信息（覆盖 .lpi 的 dsDwarf3），-O3 优化，-CX/-XX 智能链接去死代码，-Xs strip。约 29MB→7MB。
+        run: |
+          # macOS 的 zip 版 lazbuild 需显式指定 Lazarus 目录；其它平台由安装包配好，留空即可。
+          EXTRA=""
+          [ -n "${LAZARUS_DIR:-}" ] && EXTRA="--lazarusdir=${LAZARUS_DIR}"
+          lazbuild --no-write-project -B $EXTRA \
+            --cpu=${{ matrix.cpu }} \
+            --operating-system=${{ matrix.target-os }} \
+            --widgetset=${{ matrix.widgetset }} \
+            --opt="-g- -O3 -CX -XX -Xs" \
+            CodingTool.lpi
+          ls -la "${{ matrix.bin }}"
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+          NAME: ${{ matrix.name }}
+          BIN: ${{ matrix.bin }}
+        run: |
+          $asset = "CodingTool-$env:VERSION-$env:NAME.zip"
+          Compress-Archive -Path "$env:BIN" -DestinationPath $asset -Force
+          echo "ASSET=$asset" >> $env:GITHUB_ENV
+
+      - name: Package (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+          NAME: ${{ matrix.name }}
+          BIN: ${{ matrix.bin }}
+        run: |
+          chmod +x "$BIN"
+          asset="CodingTool-${VERSION}-${NAME}.tar.gz"
+          tar czf "$asset" "$BIN"
+          echo "ASSET=$asset" >> "$GITHUB_ENV"
+
+      # cocoa GUI 程序应以 .app bundle 分发，否则无 Dock 图标、菜单栏行为异常。
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+          NAME: ${{ matrix.name }}
+          BIN: ${{ matrix.bin }}
+        run: |
+          plist_ver="${VERSION#v}"
+          [[ "$plist_ver" =~ ^[0-9]+(\.[0-9]+)*$ ]] || plist_ver="0.0.0"
+          app="CodingTool.app"
+          # lazbuild 在 macOS 上通常已生成 .app（其内可执行文件与根目录二进制同源）；已存在则复用，避免自我覆盖。
+          mkdir -p "$app/Contents/Resources"
+          if [[ ! -f "$app/Contents/MacOS/CodingTool" ]]; then
+            mkdir -p "$app/Contents/MacOS"
+            cp "$BIN" "$app/Contents/MacOS/CodingTool"
+          fi
+          chmod +x "$app/Contents/MacOS/CodingTool"
+          cat > "$app/Contents/Info.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleName</key><string>CodingTool</string>
+            <key>CFBundleDisplayName</key><string>CodingTool</string>
+            <key>CFBundleIdentifier</key><string>com.marjune.codingtool</string>
+            <key>CFBundleExecutable</key><string>CodingTool</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleShortVersionString</key><string>${plist_ver}</string>
+            <key>CFBundleVersion</key><string>${plist_ver}</string>
+            <key>NSHighResolutionCapable</key><true/>
+            <key>LSMinimumSystemVersion</key><string>10.13</string>
+          </dict>
+          </plist>
+          PLIST
+          asset="CodingTool-${VERSION}-${NAME}.zip"
+          # ditto 保留 bundle 结构与可执行权限。
+          ditto -c -k --sequesterRsrc --keepParent "$app" "$asset"
+          echo "ASSET=$asset" >> "$GITHUB_ENV"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: CodingTool-${{ matrix.name }}
+          path: ${{ env.ASSET }}
+          if-no-files-found: error
+
+  release:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      # 先删旧 Release（保留标签），再新建为 pre-release，待人工确认后手动转正式。
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
+          gh release create "$TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$TAG" \
+            --generate-notes \
+            --prerelease

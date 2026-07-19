@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=CodingTool
+Name[zh_CN]=编码辅助工具
+GenericName=Coding Assistant
+GenericName[zh_CN]=程序员编码辅助工具
+Comment=Batch line/column text transformations
+Comment[zh_CN]=对纯文本做批量的行/列文本变换
+Exec=CodingTool
+Icon=codingtool
+Terminal=false
+Categories=Utility;TextTools;
+Keywords=text;coding;transform;prefix;suffix;sort;
+StartupNotify=true
+StartupWMClass=CodingTool

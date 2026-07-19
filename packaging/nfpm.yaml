@@ -1,0 +1,54 @@
+# nfpm 配置：从单份定义生成 deb / rpm / archlinux / apk 四种 Linux 包。
+# 变量 ${PKG_VERSION} 与 ${PKG_ARCH} 由 CI 通过环境变量注入。
+# 用法：nfpm package -f packaging/nfpm.yaml -p <deb|rpm|archlinux|apk> -t dist/
+name: codingtool
+arch: ${PKG_ARCH}          # nfpm 规范架构名（amd64/arm64），各打包器自动转换
+platform: linux
+version: ${PKG_VERSION}
+version_schema: none       # 不强制 semver，直接采用传入版本
+section: utils
+priority: optional
+maintainer: "MJ PC Lab"
+description: |
+  程序员编码辅助工具 - 对纯文本做批量的行/列文本变换
+  （加前后缀、拆分/合并行、大小写转换、排序、列抽取，及按语言的专用处理）。
+vendor: "MJ PC Lab"
+homepage: "https://github.com/mjpclab/CodingAssistant"
+license: "See LICENSE"
+
+contents:
+  - src: ./CodingTool
+    dst: /usr/bin/CodingTool
+    file_info:
+      mode: 0755
+  - src: ./packaging/codingtool.desktop
+    dst: /usr/share/applications/codingtool.desktop
+  - src: ./packaging/icons/16.png
+    dst: /usr/share/icons/hicolor/16x16/apps/codingtool.png
+  - src: ./packaging/icons/32.png
+    dst: /usr/share/icons/hicolor/32x32/apps/codingtool.png
+  - src: ./packaging/icons/48.png
+    dst: /usr/share/icons/hicolor/48x48/apps/codingtool.png
+  - src: ./packaging/icons/128.png
+    dst: /usr/share/icons/hicolor/128x128/apps/codingtool.png
+  - src: ./packaging/icons/256.png
+    dst: /usr/share/icons/hicolor/256x256/apps/codingtool.png
+
+scripts:
+  postinstall: ./packaging/scripts/postinstall.sh
+  postremove: ./packaging/scripts/postremove.sh
+
+# 运行时依赖 GTK2（LCL gtk2 widgetset），各发行版包名不同。
+overrides:
+  deb:
+    depends:
+      - libgtk2.0-0
+  rpm:
+    depends:
+      - gtk2
+  archlinux:
+    depends:
+      - gtk2
+  apk:
+    depends:
+      - gtk+2.0

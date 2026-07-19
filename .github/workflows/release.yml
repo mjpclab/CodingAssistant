@@ -185,9 +185,17 @@ jobs:
           NAME: ${{ matrix.name }}
           BIN: ${{ matrix.bin }}
         run: |
-          $asset = "CodingTool-$env:VERSION-$env:NAME.zip"
-          Compress-Archive -Path "$env:BIN" -DestinationPath $asset -Force
-          echo "ASSET=$asset" >> $env:GITHUB_ENV
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Compress-Archive -Path "$env:BIN" -DestinationPath "dist/CodingTool-$env:VERSION-$env:NAME.zip" -Force
+
+      # 安装 nfpm：从单份配置生成 deb/rpm/archlinux/apk。go install 与架构无关，arm64 runner 亦可用。
+      - name: Install nfpm (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Package (Linux)
         if: runner.os == 'Linux'
@@ -196,11 +204,27 @@ jobs:
           VERSION: ${{ steps.ver.outputs.version }}
           NAME: ${{ matrix.name }}
           BIN: ${{ matrix.bin }}
+          CPU: ${{ matrix.cpu }}
         run: |
+          set -euo pipefail
+          mkdir -p dist
           chmod +x "$BIN"
-          asset="CodingTool-${VERSION}-${NAME}.tar.gz"
-          tar czf "$asset" "$BIN"
-          echo "ASSET=$asset" >> "$GITHUB_ENV"
+          # 便携压缩包（不依赖包管理器）。
+          tar czf "dist/CodingTool-${VERSION}-${NAME}.tar.gz" "$BIN"
+          # nfpm 规范架构名：x86_64->amd64，aarch64->arm64。
+          case "$CPU" in
+            x86_64)  export PKG_ARCH="amd64" ;;
+            aarch64) export PKG_ARCH="arm64" ;;
+            *)       export PKG_ARCH="$CPU" ;;
+          esac
+          # 包版本需为纯数字点分；dev 构建等非法值回退为 0.0.0。
+          pkg_ver="${VERSION#v}"
+          [[ "$pkg_ver" =~ ^[0-9]+(\.[0-9]+)*$ ]] || pkg_ver="0.0.0"
+          export PKG_VERSION="$pkg_ver"
+          for p in deb rpm archlinux apk; do
+            nfpm package -f packaging/nfpm.yaml -p "$p" -t dist/
+          done
+          ls -la dist/
 
       # cocoa GUI 程序应以 .app bundle 分发，否则无 Dock 图标、菜单栏行为异常。
       - name: Package (macOS)
@@ -241,16 +265,15 @@ jobs:
           </dict>
           </plist>
           PLIST
-          asset="CodingTool-${VERSION}-${NAME}.zip"
+          mkdir -p dist
           # ditto 保留 bundle 结构与可执行权限。
-          ditto -c -k --sequesterRsrc --keepParent "$app" "$asset"
-          echo "ASSET=$asset" >> "$GITHUB_ENV"
+          ditto -c -k --sequesterRsrc --keepParent "$app" "dist/CodingTool-${VERSION}-${NAME}.zip"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: CodingTool-${{ matrix.name }}
-          path: ${{ env.ASSET }}
+          path: dist/
           if-no-files-found: error
 
   release:

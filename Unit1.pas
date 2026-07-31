@@ -553,6 +553,7 @@ uses Clipbrd;
     begin
         FTool:=TCodeUtility.Create(txtMemo.Lines);
         edtSeqTemplate.Text:=TrimRight(edtSeqTemplate.Text);     //remove the end new empty line
+        ActiveControl:=txtMemo;                                  //focus the main text area on startup
     end;
 
     function TfrmMain.GetTool:TCodeUtility;

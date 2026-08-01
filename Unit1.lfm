@@ -278,9 +278,10 @@ object frmMain: TfrmMain
     HideSelection = False
     ParentFont = False
     PopupMenu = mnuPopup
-    ScrollBars = ssBoth
+    ScrollBars = ssAutoBoth
     TabOrder = 3
     WantTabs = True
+    WordWrap = False
     OnKeyDown = txtMemoKeyDown
     OnKeyUp = txtMemoKeyUp
     OnMouseDown = txtMemoMouseDown

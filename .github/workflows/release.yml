@@ -238,12 +238,14 @@ jobs:
           plist_ver="${VERSION#v}"
           [[ "$plist_ver" =~ ^[0-9]+(\.[0-9]+)*$ ]] || plist_ver="0.0.0"
           app="CodingTool.app"
-          # lazbuild 在 macOS 上通常已生成 .app（其内可执行文件与根目录二进制同源）；已存在则复用，避免自我覆盖。
-          mkdir -p "$app/Contents/Resources"
-          if [[ ! -f "$app/Contents/MacOS/CodingTool" ]]; then
-            mkdir -p "$app/Contents/MacOS"
-            cp "$BIN" "$app/Contents/MacOS/CodingTool"
-          fi
+          # lazbuild 生成的 .app 里 Contents/MacOS/CodingTool 只是指向工程根二进制的符号链接
+          # （相对路径 ../../../CodingTool），分发解压后目标不存在，必须替换为真实二进制。
+          # 注意不能用 -f 判断"已存在"：它会跟随符号链接，构建机上恒为真。
+          mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+          # 先复制到临时目录（cp 跟随源符号链接取真实内容），再覆盖，避免源与目标互为链接时自我截断。
+          cp "$BIN" "$RUNNER_TEMP/CodingTool"
+          rm -f "$app/Contents/MacOS/CodingTool"
+          mv "$RUNNER_TEMP/CodingTool" "$app/Contents/MacOS/CodingTool"
           chmod +x "$app/Contents/MacOS/CodingTool"
           # 放入应用图标（版本库内预生成的 .icns）
           cp CodingTool.icns "$app/Contents/Resources/CodingTool.icns"
@@ -265,6 +267,13 @@ jobs:
           </dict>
           </plist>
           PLIST
+          # 校验 bundle 内不含符号链接（打包后链接目标不存在会导致 .app 无法启动）。
+          if find "$app" -type l | grep -q .; then
+            echo "错误：bundle 内存在符号链接："
+            find "$app" -type l -exec ls -l {} +
+            exit 1
+          fi
+          file "$app/Contents/MacOS/CodingTool"
           mkdir -p dist
           # ditto 保留 bundle 结构与可执行权限。
           ditto -c -k --sequesterRsrc --keepParent "$app" "dist/CodingTool-${VERSION}-${NAME}.zip"

@@ -297,7 +297,7 @@ jobs:
           path: dist
           merge-multiple: true
 
-      # 先删旧 Release（保留标签），再新建为 pre-release，待人工确认后手动转正式。
+      # 先删旧 Release（保留标签），再直接发布为正式 Release。
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -308,4 +308,4 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --title "$TAG" \
             --generate-notes \
-            --prerelease
+            --latest

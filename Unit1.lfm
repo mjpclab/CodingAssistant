@@ -370,10 +370,13 @@ object frmMain: TfrmMain
         end
         object btnDeleteBeforeStringLookForward: TButton
           Left = 110
-          Height = 45
+          Height = 25
           Top = 94
-          Width = 73
-          Caption = '删符号之前'#13#10'(正向查找)'
+          Width = 80
+          Caption = '正向删之前'
+          Hint = '正向查找符号，删除符号之前的内容'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 14
           OnClick = btnDeleteBeforeStringLookForwardClick
         end
@@ -439,10 +442,13 @@ object frmMain: TfrmMain
         end
         object btnDeleteAfterStringLookBackward: TButton
           Left = 294
-          Height = 45
+          Height = 25
           Top = 145
-          Width = 73
-          Caption = '删符号之后'#13#10'(负向查找)'
+          Width = 80
+          Caption = '负向删之后'
+          Hint = '负向查找符号，删除符号之后的内容'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 23
           OnClick = btnDeleteAfterStringLookBackwardClick
         end
@@ -776,10 +782,13 @@ object frmMain: TfrmMain
         end
         object btnDeleteBeforeStringLookBackward: TButton
           Left = 110
-          Height = 45
+          Height = 25
           Top = 145
-          Width = 73
-          Caption = '删符号之前'#13#10'(负向查找)'
+          Width = 80
+          Caption = '负向删之前'
+          Hint = '负向查找符号，删除符号之前的内容'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 20
           OnClick = btnDeleteBeforeStringLookBackwardClick
         end
@@ -802,10 +811,13 @@ object frmMain: TfrmMain
         end
         object btnDeleteAfterStringLookForward: TButton
           Left = 294
-          Height = 45
+          Height = 25
           Top = 96
-          Width = 73
-          Caption = '删符号之后'#13#10'(正向查找)'
+          Width = 80
+          Caption = '正向删之后'
+          Hint = '正向查找符号，删除符号之后的内容'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 17
           OnClick = btnDeleteAfterStringLookForwardClick
         end

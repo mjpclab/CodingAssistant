@@ -384,6 +384,20 @@ type
     function GetTool:TCodeUtility;
     procedure GetCursorPosition(const txt:TCustomMemo;out rowNum,colNum:integer);
     procedure RefreshMemoPosition;
+    {$IFDEF DARWIN}
+    //macOS only menu bar; see BuildMacMenuBar for why it exists.
+    procedure BuildMacMenuBar;
+    procedure AddMacMenuItem(const parent:TMenuItem;const itemCaption:string;
+        const key:word;const handler:TNotifyEvent);
+    function MacTargetEdit:TCustomEdit;
+    procedure MacCloseClick(Sender:TObject);
+    procedure MacMinimizeClick(Sender:TObject);
+    procedure MacUndoClick(Sender:TObject);
+    procedure MacCutClick(Sender:TObject);
+    procedure MacCopyClick(Sender:TObject);
+    procedure MacPasteClick(Sender:TObject);
+    procedure MacSelectAllClick(Sender:TObject);
+    {$ENDIF}
     //In LCL a TMemo's Lines object is recreated when its handle is (re)allocated,
     //so a reference cached at FormCreate dangles once the form is shown. Always
     //rebind Tool to the memo's current Lines before use.
@@ -546,6 +560,128 @@ uses Clipbrd;
         pnlColNum.Caption := IntToStr(colnum);
     end;
 
+{$IFDEF DARWIN}
+    //macOS has no window manager level shortcuts: Cmd+W, Cmd+M and the clipboard
+    //keys are nothing but key equivalents of main menu items, so an application
+    //without a TMainMenu simply has none of them. Windows and Linux need no
+    //counterpart - Alt+F4 and friends are handled by the system before the app
+    //ever sees them - hence the IFDEF. The menu is built in code rather than
+    //dropped on the form because on Win32/GTK/Qt a TMainMenu is drawn inside the
+    //window and would push the anchored layout down, whereas Cocoa hoists it to
+    //the system menu bar at no cost to the client area.
+    procedure TfrmMain.BuildMacMenuBar;
+    var
+        bar:TMainMenu;
+        mnuFile,mnuEdit,mnuWindow:TMenuItem;
+    begin
+        bar:=TMainMenu.Create(Self);
+
+        mnuFile:=TMenuItem.Create(Self);
+        mnuFile.Caption:='文件';
+        bar.Items.Add(mnuFile);
+        AddMacMenuItem(mnuFile,'关闭',Ord('W'),MacCloseClick);
+
+        mnuEdit:=TMenuItem.Create(Self);
+        mnuEdit.Caption:='编辑';
+        bar.Items.Add(mnuEdit);
+        AddMacMenuItem(mnuEdit,'撤销',Ord('Z'),MacUndoClick);
+        AddMacMenuItem(mnuEdit,'-',0,nil);
+        AddMacMenuItem(mnuEdit,'剪切',Ord('X'),MacCutClick);
+        AddMacMenuItem(mnuEdit,'复制',Ord('C'),MacCopyClick);
+        AddMacMenuItem(mnuEdit,'粘贴',Ord('V'),MacPasteClick);
+        AddMacMenuItem(mnuEdit,'-',0,nil);
+        AddMacMenuItem(mnuEdit,'全选',Ord('A'),MacSelectAllClick);
+
+        mnuWindow:=TMenuItem.Create(Self);
+        mnuWindow.Caption:='窗口';
+        bar.Items.Add(mnuWindow);
+        AddMacMenuItem(mnuWindow,'最小化',Ord('M'),MacMinimizeClick);
+
+        Menu:=bar;
+    end;
+
+    procedure TfrmMain.AddMacMenuItem(const parent:TMenuItem;const itemCaption:string;
+        const key:word;const handler:TNotifyEvent);
+    var
+        item:TMenuItem;
+    begin
+        item:=TMenuItem.Create(Self);
+        item.Caption:=itemCaption;
+        //A key of 0 means no shortcut; ssMeta is the Command key under Cocoa.
+        if key<>0 then item.ShortCut:=ShortCut(key,[ssMeta]);
+        item.OnClick:=handler;
+        parent.Add(item);
+    end;
+
+    //The menu bar is application wide, so its edit commands have to act on
+    //whichever edit control holds focus - otherwise Cmd+C inside one of the
+    //parameter boxes would copy the main text area instead. Anything else (a
+    //button, the tab strip) falls back to txtMemo, the control the popup menu
+    //is bound to.
+    function TfrmMain.MacTargetEdit:TCustomEdit;
+    begin
+        if (ActiveControl<>nil) and (ActiveControl is TCustomEdit) then begin
+            Result:=TCustomEdit(ActiveControl);
+        end else begin
+            Result:=txtMemo;
+        end;
+    end;
+
+    procedure TfrmMain.MacCloseClick(Sender: TObject);
+    begin
+        Close;
+    end;
+
+    procedure TfrmMain.MacMinimizeClick(Sender: TObject);
+    begin
+        //Not Application.Minimize: under Cocoa that is NSApp.hide, i.e. Cmd+H.
+        //Not WindowState:=wsMinimized either - TCustomForm.SetWindowState skips
+        //the call whenever it believes the form is already minimised. ShowWindow
+        //goes straight to NSWindow.miniaturize.
+        LCLIntf.ShowWindow(Handle,SW_MINIMIZE);
+    end;
+
+    procedure TfrmMain.MacUndoClick(Sender: TObject);
+    begin
+        MacTargetEdit.Undo;
+    end;
+
+    procedure TfrmMain.MacCutClick(Sender: TObject);
+    var
+        target:TCustomEdit;
+    begin
+        //On the main text area reuse the existing actions so the menu behaves
+        //exactly like the popup menu (which cuts/copies everything when nothing
+        //is selected); other edits get the plain clipboard behaviour.
+        target:=MacTargetEdit;
+        if target=txtMemo then actCutExecute(Sender) else target.CutToClipboard;
+    end;
+
+    procedure TfrmMain.MacCopyClick(Sender: TObject);
+    var
+        target:TCustomEdit;
+    begin
+        target:=MacTargetEdit;
+        if target=txtMemo then actCopyExecute(Sender) else target.CopyToClipboard;
+    end;
+
+    procedure TfrmMain.MacPasteClick(Sender: TObject);
+    var
+        target:TCustomEdit;
+    begin
+        target:=MacTargetEdit;
+        if target=txtMemo then actPasteExecute(Sender) else target.PasteFromClipboard;
+    end;
+
+    procedure TfrmMain.MacSelectAllClick(Sender: TObject);
+    var
+        target:TCustomEdit;
+    begin
+        target:=MacTargetEdit;
+        if target=txtMemo then actSelectAllExecute(Sender) else target.SelectAll;
+    end;
+{$ENDIF}
+
 {$ENDREGION}
 
 {$REGION 'Tool''s Life Cycle'}
@@ -554,6 +690,9 @@ uses Clipbrd;
         FTool:=TCodeUtility.Create(txtMemo.Lines);
         edtSeqTemplate.Text:=TrimRight(edtSeqTemplate.Text);     //remove the end new empty line
         ActiveControl:=txtMemo;                                  //focus the main text area on startup
+        {$IFDEF DARWIN}
+        BuildMacMenuBar;
+        {$ENDIF}
     end;
 
     function TfrmMain.GetTool:TCodeUtility;

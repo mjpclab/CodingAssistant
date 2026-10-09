@@ -3,9 +3,7 @@ unit Unit_Utility;
 
 interface
 uses SysUtils,Classes,
-  Unit_UtilityCommon,Unit_UtilitySequence,Unit_UtilityCSharp,Unit_UtilityVB,
-  Unit_UtilityPascal,Unit_UtilityPHP,Unit_UtilitySQL,Unit_UtilityIe
-  ,Unit_UtilityMASM,Unit_UtilityHtml;
+  Unit_UtilityCommon,Unit_UtilitySequence,Unit_UtilitySQL,Unit_UtilityMASM;
 
 type TCodeUtility=class
   private
@@ -13,13 +11,7 @@ type TCodeUtility=class
   public
     Common:TCodeUtilityCommon;
     Sequence:TCodeUtilitySequence;
-    VB:TCodeUtilityVB;
-    CSharp:TCodeUtilityCSharp;
-    ObjectPascal:TCodeUtilityPascal;
-    PHP:TCodeUtilityPHP;
     SQL:TCodeUtilitySQL;
-    IE:TCodeUtilityIE;
-    HTML:TCodeUtilityHTML;
     MASM:TCodeUtilityMASM;
 
     constructor Create(theLines: TStrings);
@@ -39,13 +31,7 @@ begin
     FLines:=theLines;
     Common:=TCodeUtilityCommon.Create(theLines);
     Sequence:=TCodeUtilitySequence.Create(theLines);
-    VB:=TCodeUtilityVB.Create(theLines);
-    CSharp:=TCodeUtilityCSharp.Create(theLines);
-    ObjectPascal:=TCodeUtilityPascal.Create(theLines);
-    PHP:=TCodeUtilityPHP.Create(theLines);
     SQL:=TCodeUtilitySQL.Create(theLines);
-    IE:=TCodeUtilityIE.Create(theLines);
-    HTML:=TCodeUtilityHTML.Create(theLines);
     MASM:=TCodeUtilityMASM.Create(theLines);
 end;
 
@@ -57,13 +43,7 @@ begin
     FLines:=theLines;
     Common.Lines:=theLines;
     Sequence.Lines:=theLines;
-    VB.Lines:=theLines;
-    CSharp.Lines:=theLines;
-    ObjectPascal.Lines:=theLines;
-    PHP.Lines:=theLines;
     SQL.Lines:=theLines;
-    IE.Lines:=theLines;
-    HTML.Lines:=theLines;
     MASM.Lines:=theLines;
 end;
 
@@ -72,13 +52,7 @@ begin
     //Free members
     Common.Free;
     Sequence.Free;
-    VB.Free;
-    CSharp.Free;
-    ObjectPascal.Free;
-    PHP.Free;
     SQL.Free;
-    IE.Free;
-    HTML.Free;
     MASM.Free;
 
     inherited;

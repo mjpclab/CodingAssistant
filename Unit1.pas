@@ -30,9 +30,6 @@ type
     btnUpperCase: TButton;
     btnTrimRight: TButton;
     btnCompressSpaces: TButton;
-    TabSheet2: TTabSheet;
-    btnVBCancelCombineString: TButton;
-    btnVBCombineString: TButton;
     TabSheet3: TTabSheet;
     btnSqlUpperKeyWords: TButton;
     btnSqlWrapBySyntax: TButton;
@@ -70,22 +67,7 @@ type
     edtReplaceFrom: TEdit;
     edtReplaceTo: TEdit;
     btnReplace: TButton;
-    TabSheet5: TTabSheet;
-    btnCSCombineString: TButton;
-    btnCSCancelCombineString: TButton;
-    TabSheet6: TTabSheet;
-    btnPascalCombineString: TButton;
-    btnPascalCancelCombineString: TButton;
-    btnPascalExchangePascalLet: TButton;
     btnReverseLines: TButton;
-    TabSheet7: TTabSheet;
-    btnPhpCombineSingleQuoteString: TButton;
-    btnPhpCancelCombineSingleQuoteString: TButton;
-    btnPhpCombineDoubleQuoteString: TButton;
-    btnPhpCancelCombineDoubleQuoteString: TButton;
-    edtPhpHereDocFlag: TEdit;
-    btnPhpAddHereDoc: TButton;
-    btnPhpRemoveHereDoc: TButton;
     ToolButton1: TToolButton;
     btnCut: TToolButton;
     btnCopy: TToolButton;
@@ -130,12 +112,6 @@ type
     chkCompactWhiteSpaceLine: TCheckBox;
     btnCopyTab: TToolButton;
     actCopyTab: TAction;
-    tabIe: TTabSheet;
-    btnIeIfIe: TButton;
-    btnIeIfCondition: TButton;
-    btnIeRemoveIf: TButton;
-    drpIeIfOperator: TComboBox;
-    drpIeIfVersion: TComboBox;
     edtDelPrefix: TEdit;
     btnDelPrefix: TButton;
     edtDelSuffix: TEdit;
@@ -162,29 +138,6 @@ type
     edtExtractColumnDelimit: TEdit;
     numExtractColumnIndex: TSpinEdit;
     btnExtractColumn: TButton;
-    lblPascalPropType: TLabel;
-    lblPascalPropPrivate: TLabel;
-    lblPascalPropPublic: TLabel;
-    edtPascalPropType: TEdit;
-    edtPascalPropPrivate: TEdit;
-    edtPascalPropPublic: TEdit;
-    edtPascalPropDeclaration: TEdit;
-    btnPascalPropGenerate: TButton;
-    btnPascalPropGenerateCopy: TButton;
-    btnPascalCompletePropertyFromPublicDeclare: TButton;
-    lblPascalCompletePropertyPrivatePrefix: TLabel;
-    edtPascalCompleteDeclarePrivatePrefix: TEdit;
-    btnPascalCompletePropertyFromPrivateDeclare: TButton;
-    lbl1: TLabel;
-    Label1: TLabel;
-    edtVBGeneratePropName: TEdit;
-    edtVBGeneratePropType: TEdit;
-    btnVBGeneratePropDeclaration: TButton;
-    tabHtml: TTabSheet;
-    edtHtmlHtmlTag: TEdit;
-    btnHtmlHtmlTag: TButton;
-    edtHtmlBBCode: TEdit;
-    btnHtmlBBCode: TButton;
     btnLineFirstUpper: TButton;
     btnLineFirstLower: TButton;
     edtAfterFirstUpper: TEdit;
@@ -194,12 +147,6 @@ type
     btnJoinAfterEachLine: TButton;
     chkDeleteBeforeAndStringLookForward: TCheckBox;
     chkDeleteAfterAndStringLookBackward: TCheckBox;
-    btnCSharpPrivateSetToPropertyChanged: TButton;
-    btnCSharpPropertyChanged: TButton;
-    btnVBPrivateSetToOnPropertyChanged: TButton;
-    btnVBPrivateSetToPropertyChanged: TButton;
-    btnCSharpGeneratePropertyChanged: TButton;
-    btnVBGeneratePropertyChanged: TButton;
     numExtractIndex1: TSpinEdit;
     numExtractLength1: TSpinEdit;
     btnExtractString1: TButton;
@@ -215,10 +162,6 @@ type
     btnDeleteDuplicatedLine: TButton;
     chkDeleteDuplicatedLineIgnoreCase: TCheckBox;
     chkDeleteDuplicatedLineIgnoreWhitePadding: TCheckBox;
-    btnHtmlEscape: TButton;
-    btnHtmlUnescape: TButton;
-    btnHtmlUnHtml: TButton;
-    btnHtmlUnBBCode: TButton;
     edtRepeatHorz: TEdit;
     btnRepeatHorz: TButton;
     numRepeatHorz: TSpinEdit;
@@ -270,8 +213,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnLowerCaseClick(Sender: TObject);
-    procedure btnVBCombineStringClick(Sender: TObject);
-    procedure btnVBCancelCombineStringClick(Sender: TObject);
     procedure btnSqlUpperKeyWordsClick(Sender: TObject);
     procedure btnSqlWrapBySyntaxClick(Sender: TObject);
     procedure btnSqlUpperWrapBySyntaxClick(Sender: TObject);
@@ -296,18 +237,7 @@ type
     procedure btnDelNSuffixClick(Sender: TObject);
     procedure btnDeleteEmptyLineClick(Sender: TObject);
     procedure pnlTitleClick(Sender: TObject);
-    procedure btnCSCombineStringClick(Sender: TObject);
-    procedure btnCSCancelCombineStringClick(Sender: TObject);
-    procedure btnPascalCancelCombineStringClick(Sender: TObject);
-    procedure btnPascalCombineStringClick(Sender: TObject);
-    procedure btnPascalExchangePascalLetClick(Sender: TObject);
     procedure btnReverseLinesClick(Sender: TObject);
-    procedure btnPhpCombineSingleQuoteStringClick(Sender: TObject);
-    procedure btnPhpCancelCombineSingleQuoteStringClick(Sender: TObject);
-    procedure btnPhpCombineDoubleQuoteStringClick(Sender: TObject);
-    procedure btnPhpCancelCombineDoubleQuoteStringClick(Sender: TObject);
-    procedure btnPhpAddHereDocClick(Sender: TObject);
-    procedure btnPhpRemoveHereDocClick(Sender: TObject);
     procedure lblReplaceExchangeClick(Sender: TObject);
     procedure actStayOnTopExecute(Sender: TObject);
     procedure btnJoinBeforeEachLineClick(Sender: TObject);
@@ -323,9 +253,6 @@ type
     procedure btnInsertAfterStringClick(Sender: TObject);
     procedure btnCompactEmptyLineClick(Sender: TObject);
     procedure actCopyTabExecute(Sender: TObject);
-    procedure btnIeIfIeClick(Sender: TObject);
-    procedure btnIeRemoveIfClick(Sender: TObject);
-    procedure btnIeIfConditionClick(Sender: TObject);
     procedure txtMemoKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure txtMemoMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -342,33 +269,16 @@ type
     procedure btnRDeleteString2Click(Sender: TObject);
     procedure btnDeleteColumnClick(Sender: TObject);
     procedure btnExtractColumnClick(Sender: TObject);
-    procedure btnPascalPropGenerateClick(Sender: TObject);
-    procedure btnPascalPropGenerateCopyClick(Sender: TObject);
-    procedure btnPascalCompletePropertyFromPublicDeclareClick(Sender: TObject);
-    procedure btnPascalCompletePropertyFromPrivateDeclareClick(Sender: TObject);
-    procedure btnVBGeneratePropDeclarationClick(Sender: TObject);
-    procedure btnHtmlHtmlTagClick(Sender: TObject);
-    procedure btnHtmlBBCodeClick(Sender: TObject);
     procedure btnLineFirstUpperClick(Sender: TObject);
     procedure btnLineFirstLowerClick(Sender: TObject);
     procedure btnAfterFirstUpperClick(Sender: TObject);
     procedure btnAfterFirstLowerClick(Sender: TObject);
     procedure btnJoinAfterEachLineClick(Sender: TObject);
-    procedure btnCSharpPrivateSetToPropertyChangedClick(Sender: TObject);
-    procedure btnCSharpPropertyChangedClick(Sender: TObject);
-    procedure btnVBPrivateSetToOnPropertyChangedClick(Sender: TObject);
-    procedure btnVBPrivateSetToPropertyChangedClick(Sender: TObject);
-    procedure btnCSharpGeneratePropertyChangedClick(Sender: TObject);
     procedure btnDeleteDuplicatedLineClick(Sender: TObject);
     procedure btnExtractString1Click(Sender: TObject);
     procedure btnExtractString2Click(Sender: TObject);
-    procedure btnHtmlEscapeClick(Sender: TObject);
-    procedure btnHtmlUnescapeClick(Sender: TObject);
     procedure btnRExtractString1Click(Sender: TObject);
     procedure btnRExtractString2Click(Sender: TObject);
-    procedure btnVBGeneratePropertyChangedClick(Sender: TObject);
-    procedure btnHtmlUnHtmlClick(Sender: TObject);
-    procedure btnHtmlUnBBCodeClick(Sender: TObject);
     procedure btnRepeatHorzClick(Sender: TObject);
     procedure btnDeleteBeforeStringLookBackwardClick(Sender: TObject);
     procedure btnDeleteAfterStringLookForwardClick(Sender: TObject);
@@ -1032,145 +942,6 @@ procedure TfrmMain.btnSeqRepeatCountClick(Sender: TObject);
     end;
 {$ENDREGION}
 
-{$REGION 'VB'}
-    procedure TfrmMain.btnVBCombineStringClick(Sender: TObject);
-    begin
-        Tool.VB.CombineToStringExpression;
-    end;
-
-    procedure TfrmMain.btnVBCancelCombineStringClick(Sender: TObject);
-    begin
-        Tool.VB.CancelCombineStringExpression;
-    end;
-
-    procedure TfrmMain.btnVBPrivateSetToOnPropertyChangedClick(Sender: TObject);
-    begin
-        Tool.VB.PrivateSetToOnPropertyChanged;
-    end;
-
-    procedure TfrmMain.btnVBGeneratePropertyChangedClick(Sender: TObject);
-    begin
-        Tool.VB.GeneratePropertyChanged;
-    end;
-
-    procedure TfrmMain.btnVBPrivateSetToPropertyChangedClick(Sender: TObject);
-    begin
-        Tool.VB.PrivateSetToPropertyChanged;
-    end;
-
-    procedure TfrmMain.btnVBGeneratePropDeclarationClick(Sender: TObject);
-    begin
-        Tool.VB.GenerateClassicPropertyDeclaration(edtVBGeneratePropName.Text,edtVBGeneratePropType.Text);
-    end;
-
-{$ENDREGION}
-
-{$REGION 'CSharp'}
-    procedure TfrmMain.btnCSCombineStringClick(Sender: TObject);
-    begin
-        Tool.CSharp.CombineToStringExpression;
-    end;
-
-   procedure TfrmMain.btnCSCancelCombineStringClick(Sender: TObject);
-    begin
-        Tool.CSharp.CancelCombineStringExpression;
-    end;
-
-    procedure TfrmMain.btnCSharpGeneratePropertyChangedClick(Sender: TObject);
-    begin
-        Tool.CSharp.GeneratePropertyChanged;
-    end;
-
-    procedure TfrmMain.btnCSharpPrivateSetToPropertyChangedClick(Sender: TObject);
-    begin
-        Tool.CSharp.PrivateSetToOnPropertyChanged;
-    end;
-
-    procedure TfrmMain.btnCSharpPropertyChangedClick(Sender: TObject);
-    begin
-        Tool.CSharp.PrivateSetToPropertyChanged;
-    end;
-
-{$ENDREGION}
-
-{$REGION 'Pascal'}
-    procedure TfrmMain.btnPascalCombineStringClick(Sender: TObject);
-    begin
-        Tool.ObjectPascal.CombineToStringExpression;
-    end;
-
-    procedure TfrmMain.btnPascalCancelCombineStringClick(Sender: TObject);
-    begin
-        Tool.ObjectPascal.CancelCombineStringExpression;
-    end;
-
-    procedure TfrmMain.btnPascalExchangePascalLetClick(Sender: TObject);
-    begin
-        Tool.Common.ExchangeLetOperatorSide(':=');
-    end;
-
-    procedure TfrmMain.btnPascalPropGenerateClick(Sender: TObject);
-    begin
-        edtPascalPropDeclaration.Text:=Tool.ObjectPascal.GeneratePropertyDeclaration
-        (
-            edtPascalPropType.Text,
-            edtPascalPropPrivate.Text,
-            edtPascalPropPublic.Text
-        );
-    end;
-
-    procedure TfrmMain.btnPascalPropGenerateCopyClick(Sender: TObject);
-    begin
-        btnPascalPropGenerate.Click;
-        edtPascalPropDeclaration.SelectAll;
-        edtPascalPropDeclaration.CopyToClipboard;
-    end;
-
-    procedure TfrmMain.btnPascalCompletePropertyFromPublicDeclareClick(Sender: TObject);
-    begin
-        Tool.ObjectPascal.CompletePropertyFromPublicDeclaration(edtPascalCompleteDeclarePrivatePrefix.Text);
-    end;
-
-    procedure TfrmMain.btnPascalCompletePropertyFromPrivateDeclareClick(Sender: TObject);
-    begin
-        Tool.ObjectPascal.CompletePropertyFromPrivateDeclaration(edtPascalCompleteDeclarePrivatePrefix.Text);
-    end;
-
-{$ENDREGION}
-
-{$REGION 'PHP'}
-    procedure TfrmMain.btnPhpCombineSingleQuoteStringClick(Sender: TObject);
-    begin
-        Tool.PHP.CombineToSingleQuoteStringExpression;
-    end;
-
-    procedure TfrmMain.btnPhpCancelCombineSingleQuoteStringClick(Sender: TObject);
-    begin
-        Tool.PHP.CancelCombineSingleQuoteStringExpression;
-    end;
-
-    procedure TfrmMain.btnPhpCombineDoubleQuoteStringClick(Sender: TObject);
-    begin
-        Tool.PHP.CombineToDoubleQuoteStringExpression;
-    end;
-
-    procedure TfrmMain.btnPhpCancelCombineDoubleQuoteStringClick(Sender: TObject);
-    begin
-        Tool.PHP.CancelCombineDoubleQuoteStringExpression;
-    end;
-
-    procedure TfrmMain.btnPhpAddHereDocClick(Sender: TObject);
-    begin
-        Tool.PHP.AddHereDocFlag(edtPhpHereDocFlag.Text);
-    end;
-
-    procedure TfrmMain.btnPhpRemoveHereDocClick(Sender: TObject);
-    begin
-        Tool.PHP.RemoveHereDocFlag;
-    end;
-
-{$ENDREGION}
-
 {$REGION 'SQL'}
     procedure TfrmMain.btnSqlUpperKeyWordsClick(Sender: TObject);
     begin
@@ -1207,57 +978,6 @@ procedure TfrmMain.btnSeqRepeatCountClick(Sender: TObject);
     procedure TfrmMain.btnSqlCancelCombineToQuotedEnumerationClick(Sender: TObject);
     begin
         Tool.SQL.CancelCombineQuotedEnumeration;
-    end;
-
-{$ENDREGION}
-
-{$REGION 'IE'}
-    procedure TfrmMain.btnIeIfIeClick(Sender: TObject);
-    begin
-        Tool.IE.AddIfIE;
-    end;
-
-    procedure TfrmMain.btnIeIfConditionClick(Sender: TObject);
-    begin
-        Tool.IE.AddIfCondition(drpIeIfOperator.Text,drpIeIfVersion.Text);
-    end;
-
-    procedure TfrmMain.btnIeRemoveIfClick(Sender: TObject);
-    begin
-        Tool.IE.RemoveIf;
-    end;
-
-{$ENDREGION}
-
-{$REGION 'HTML'}
-    procedure TfrmMain.btnHtmlHtmlTagClick(Sender: TObject);
-    begin
-        Tool.HTML.WrapHtml(edtHtmlHtmlTag.Text);
-    end;
-
-    procedure TfrmMain.btnHtmlUnHtmlClick(Sender: TObject);
-    begin
-        Tool.HTML.UnWrapHtml(edtHtmlHtmlTag.Text);
-    end;
-
-    procedure TfrmMain.btnHtmlBBCodeClick(Sender: TObject);
-    begin
-        Tool.HTML.WrapBBCode(edtHtmlBBCode.Text);
-    end;
-
-    procedure TfrmMain.btnHtmlUnBBCodeClick(Sender: TObject);
-    begin
-        Tool.HTML.UnWrapBBCode(edtHtmlBBCode.Text);
-    end;
-
-    procedure TfrmMain.btnHtmlEscapeClick(Sender: TObject);
-    begin
-        Tool.HTML.EscapeHtml;
-    end;
-
-    procedure TfrmMain.btnHtmlUnescapeClick(Sender: TObject);
-    begin
-        Tool.HTML.UnEscapeHtml;
     end;
 
 {$ENDREGION}

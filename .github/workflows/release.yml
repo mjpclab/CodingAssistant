@@ -57,9 +57,9 @@ jobs:
             widgetset: cocoa
             bin: CodingTool
 
-          # FPC 3.2.x 的 aarch64 链接需要 Xcode 15 的 classic linker（Xcode 16 全系已移除），故用 macos-14。
+          # Xcode 16.3+ 的链接器无法链接 FPC 3.2.x 的 aarch64 产物（Lazarus #41570），安装步骤会切到 Xcode 16.2。
           - name: macos-arm64
-            runs-on: macos-14
+            runs-on: macos-15
             cpu: aarch64
             target-os: darwin
             widgetset: cocoa
@@ -131,12 +131,11 @@ jobs:
           CPU: ${{ matrix.cpu }}
         run: |
           set -euo pipefail
-          # macos-15(Intel) 默认 Xcode 16.4；切到已预装的 16.2 链接器（验证可用）。macos-14 无此目录，跳过用自带 Xcode 15。
+          # macos-15 / macos-15-intel 默认 Xcode 16.4，其链接器不兼容 FPC 3.2.x；切到已预装的 16.2。
           XC="/Applications/Xcode_16.2.app/Contents/Developer"
-          if [[ -d "$XC" ]]; then
-            sudo xcode-select -s "$XC"
-            echo "DEVELOPER_DIR=$XC" >> "$GITHUB_ENV"
-          fi
+          if [[ ! -d "$XC" ]]; then echo "Xcode 16.2 not found on runner image"; exit 1; fi
+          sudo xcode-select -s "$XC"
+          echo "DEVELOPER_DIR=$XC" >> "$GITHUB_ENV"
           if [[ "$CPU" == "aarch64" ]]; then
             folder="Lazarus%20macOS%20aarch64"; lazzip="lazarus-darwin-aarch64-${LAZ_VER}.zip"
           else

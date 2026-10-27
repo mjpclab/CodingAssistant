@@ -9,7 +9,7 @@ on:
 permissions:
   contents: write
 
-# 升级 Lazarus 需同步各安装步骤里的包文件名（内嵌 FPC 版本号命名不规则，无法完全参数化）。
+# When upgrading Lazarus, update the package file names in each install step (the embedded FPC version naming is irregular and cannot be fully parameterized).
 env:
   LAZ_VER: "4.8"
   SF: "https://downloads.sourceforge.net/project/lazarus"
@@ -57,7 +57,7 @@ jobs:
             widgetset: cocoa
             bin: CodingTool
 
-          # Xcode 16 的新链接器（ld-prime）链接 FPC 3.2.x 的 aarch64 产物时会崩溃，用 -k-ld_classic 切回经典链接器（Xcode 16 起已标记废弃）。
+          # Xcode 16's new linker (ld-prime) crashes when linking FPC 3.2.x aarch64 output; -k-ld_classic switches back to the classic linker (deprecated since Xcode 16).
           - name: macos-arm64
             runs-on: macos-15
             cpu: aarch64
@@ -91,7 +91,7 @@ jobs:
           $silent = @("/VERYSILENT","/SP-","/NORESTART","/DIR=C:\Lazarus")
           curl.exe -fSL -o "$env:RUNNER_TEMP\laz.exe" "$base/lazarus-$env:LAZ_VER-fpc-3.2.2-win64.exe"
           Start-Process -Wait -FilePath "$env:RUNNER_TEMP\laz.exe" -ArgumentList $silent
-          # 32 位目标在 win64 工具链上叠加 i386-win32 交叉编译 add-on。
+          # 32-bit target: add the i386-win32 cross-compile add-on on top of the win64 toolchain.
           if ($env:CPU -eq "i386") {
             curl.exe -fSL -o "$env:RUNNER_TEMP\cross.exe" "$base/lazarus-$env:LAZ_VER-fpc-3.2.2-cross-i386-win32-win64.exe"
             Start-Process -Wait -FilePath "$env:RUNNER_TEMP\cross.exe" -ArgumentList $silent
@@ -121,7 +121,7 @@ jobs:
           for f in "$fpclaz" "$fpcsrc" "$proj"; do
             curl -fSL -o "$f" "$base/$f"
           done
-          # 用 apt 安装 .deb 以自动解决 gtk2/gdb 等依赖（dpkg -i 不会）。
+          # Install the .deb files with apt so dependencies like gtk2/gdb are resolved (dpkg -i does not).
           sudo apt-get install -y "./$fpclaz" "./$fpcsrc" "./$proj"
           lazbuild --version
 
@@ -132,7 +132,7 @@ jobs:
           CPU: ${{ matrix.cpu }}
         run: |
           set -euo pipefail
-          # macos-15 / macos-15-intel 默认 Xcode 16.4，其链接器不兼容 FPC 3.2.x；切到已预装的 16.2。
+          # macos-15 / macos-15-intel default to Xcode 16.4, whose linker is incompatible with FPC 3.2.x; switch to the preinstalled 16.2.
           XC="/Applications/Xcode_16.2.app/Contents/Developer"
           if [[ ! -d "$XC" ]]; then echo "Xcode 16.2 not found on runner image"; exit 1; fi
           sudo xcode-select -s "$XC"
@@ -143,19 +143,19 @@ jobs:
             folder="Lazarus%20macOS%20x86-64"; lazzip="lazarus-darwin-x86_64-${LAZ_VER}.zip"
           fi
           base="$SF/$folder/Lazarus%20$LAZ_VER"
-          # dmg 内的 FPC 为 intel+arm64 universal，两架构共用。
+          # The FPC in the dmg is an intel+arm64 universal build shared by both architectures.
           curl -fSL -o fpc.dmg "$base/fpc-3.2.4rc1a.intelarm64-macosx.dmg"
           curl -fSL -o laz.zip "$base/$lazzip"
           hdiutil attach fpc.dmg -nobrowse -mountpoint /tmp/fpcdmg
           find /tmp/fpcdmg -name '*.pkg' -exec sudo installer -pkg {} -target / \;
           hdiutil detach /tmp/fpcdmg
-          # 去除下载文件的隔离属性，否则解压出的内容无法执行。
+          # Remove the quarantine attribute from the download, otherwise the extracted files cannot be executed.
           xattr -cr laz.zip || true
           mkdir -p "$HOME/laz"
           unzip -q laz.zip -d "$HOME/laz"
           lb="$(find "$HOME/laz" -name lazbuild -type f | head -1)"
           if [[ -z "$lb" ]]; then echo "lazbuild not found in zip"; exit 1; fi
-          # lazbuild 内置 LazarusDir 默认指向 /Developer/lazarus，需覆盖为其真实所在目录（Lazarus 根）。
+          # lazbuild's built-in LazarusDir defaults to /Developer/lazarus; override it with the actual directory (the Lazarus root).
           lazdir="$(dirname "$lb")"
           chmod +x "$lb"
           echo "$lazdir" >> "$GITHUB_PATH"
@@ -164,9 +164,9 @@ jobs:
 
       - name: Build
         shell: bash
-        # Release 选项：-g- 关调试信息（覆盖 .lpi 的 dsDwarf3），-O3 优化，-CX/-XX 智能链接去死代码，-Xs strip。约 29MB→7MB。
+        # Release options: -g- disables debug info (overrides dsDwarf3 in the .lpi), -O3 optimizes, -CX/-XX smart-link away dead code, -Xs strips. About 29MB -> 7MB.
         run: |
-          # macOS 的 zip 版 lazbuild 需显式指定 Lazarus 目录；其它平台由安装包配好，留空即可。
+          # The zip-distributed lazbuild on macOS needs the Lazarus directory passed explicitly; installers configure it on other platforms, so leave it empty there.
           EXTRA=""
           [ -n "${LAZARUS_DIR:-}" ] && EXTRA="--lazarusdir=${LAZARUS_DIR}"
           lazbuild --no-write-project -B $EXTRA \
@@ -188,7 +188,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path dist | Out-Null
           Compress-Archive -Path "$env:BIN" -DestinationPath "dist/CodingTool-$env:VERSION-$env:NAME.zip" -Force
 
-      # 安装 nfpm：从单份配置生成 deb/rpm/archlinux/apk。go install 与架构无关，arm64 runner 亦可用。
+      # Install nfpm to build deb/rpm/archlinux/apk from a single config. go install is architecture-independent, so it also works on arm64 runners.
       - name: Install nfpm (Linux)
         if: runner.os == 'Linux'
         shell: bash
@@ -209,15 +209,15 @@ jobs:
           set -euo pipefail
           mkdir -p dist
           chmod +x "$BIN"
-          # 便携压缩包（不依赖包管理器）。
+          # Portable archive (no package manager required).
           tar czf "dist/CodingTool-${VERSION}-${NAME}.tar.gz" "$BIN"
-          # nfpm 规范架构名：x86_64->amd64，aarch64->arm64。
+          # nfpm canonical architecture names: x86_64->amd64, aarch64->arm64.
           case "$CPU" in
             x86_64)  export PKG_ARCH="amd64" ;;
             aarch64) export PKG_ARCH="arm64" ;;
             *)       export PKG_ARCH="$CPU" ;;
           esac
-          # 包版本需为纯数字点分；dev 构建等非法值回退为 0.0.0。
+          # Package versions must be dot-separated numbers; invalid values such as dev builds fall back to 0.0.0.
           pkg_ver="${VERSION#v}"
           [[ "$pkg_ver" =~ ^[0-9]+(\.[0-9]+)*$ ]] || pkg_ver="0.0.0"
           export PKG_VERSION="$pkg_ver"
@@ -226,7 +226,7 @@ jobs:
           done
           ls -la dist/
 
-      # cocoa GUI 程序应以 .app bundle 分发，否则无 Dock 图标、菜单栏行为异常。
+      # Cocoa GUI apps must ship as a .app bundle, otherwise there is no Dock icon and the menu bar misbehaves.
       - name: Package (macOS)
         if: runner.os == 'macOS'
         shell: bash
@@ -238,16 +238,16 @@ jobs:
           plist_ver="${VERSION#v}"
           [[ "$plist_ver" =~ ^[0-9]+(\.[0-9]+)*$ ]] || plist_ver="0.0.0"
           app="CodingTool.app"
-          # lazbuild 生成的 .app 里 Contents/MacOS/CodingTool 只是指向工程根二进制的符号链接
-          # （相对路径 ../../../CodingTool），分发解压后目标不存在，必须替换为真实二进制。
-          # 注意不能用 -f 判断"已存在"：它会跟随符号链接，构建机上恒为真。
+          # In the .app generated by lazbuild, Contents/MacOS/CodingTool is only a symlink to the binary in the project root
+          # (relative path ../../../CodingTool). The target does not exist after the archive is extracted, so replace it with the real binary.
+          # Do not use -f to check whether it exists: it follows the symlink and is always true on the build machine.
           mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
-          # 先复制到临时目录（cp 跟随源符号链接取真实内容），再覆盖，避免源与目标互为链接时自我截断。
+          # Copy to a temp directory first (cp follows the source symlink to get the real content), then overwrite, so the file is not truncated when source and target link to each other.
           cp "$BIN" "$RUNNER_TEMP/CodingTool"
           rm -f "$app/Contents/MacOS/CodingTool"
           mv "$RUNNER_TEMP/CodingTool" "$app/Contents/MacOS/CodingTool"
           chmod +x "$app/Contents/MacOS/CodingTool"
-          # 放入应用图标（版本库内预生成的 .icns）
+          # Add the app icon (the .icns pre-generated in the repository).
           cp CodingTool.icns "$app/Contents/Resources/CodingTool.icns"
           cat > "$app/Contents/Info.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
@@ -267,15 +267,15 @@ jobs:
           </dict>
           </plist>
           PLIST
-          # 校验 bundle 内不含符号链接（打包后链接目标不存在会导致 .app 无法启动）。
+          # Verify the bundle contains no symlinks (their targets are missing after packaging, which stops the .app from launching).
           if find "$app" -type l | grep -q .; then
-            echo "错误：bundle 内存在符号链接："
+            echo "Error: the bundle contains symlinks:"
             find "$app" -type l -exec ls -l {} +
             exit 1
           fi
           file "$app/Contents/MacOS/CodingTool"
           mkdir -p dist
-          # ditto 保留 bundle 结构与可执行权限。
+          # ditto preserves the bundle structure and executable permissions.
           ditto -c -k --sequesterRsrc --keepParent "$app" "dist/CodingTool-${VERSION}-${NAME}.zip"
 
       - name: Upload artifact
@@ -297,7 +297,7 @@ jobs:
           path: dist
           merge-multiple: true
 
-      # 先删旧 Release（保留标签），再直接发布为正式 Release。
+      # Delete the old Release first (keeping the tag), then publish directly as a full Release.
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}

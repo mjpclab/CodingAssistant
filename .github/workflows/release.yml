@@ -57,13 +57,14 @@ jobs:
             widgetset: cocoa
             bin: CodingTool
 
-          # Xcode 16.3+ 的链接器无法链接 FPC 3.2.x 的 aarch64 产物（Lazarus #41570），安装步骤会切到 Xcode 16.2。
+          # Xcode 16 的新链接器（ld-prime）链接 FPC 3.2.x 的 aarch64 产物时会崩溃，用 -k-ld_classic 切回经典链接器（Xcode 16 起已标记废弃）。
           - name: macos-arm64
             runs-on: macos-15
             cpu: aarch64
             target-os: darwin
             widgetset: cocoa
             bin: CodingTool
+            link-opt: -k-ld_classic
 
     steps:
       - name: Checkout
@@ -172,7 +173,7 @@ jobs:
             --cpu=${{ matrix.cpu }} \
             --operating-system=${{ matrix.target-os }} \
             --widgetset=${{ matrix.widgetset }} \
-            --opt="-g- -O3 -CX -XX -Xs" \
+            --opt="-g- -O3 -CX -XX -Xs ${{ matrix.link-opt }}" \
             CodingTool.lpi
           ls -la "${{ matrix.bin }}"
 

@@ -48,7 +48,6 @@ type
     btnSave: TToolButton;
     btnSaveAs: TToolButton;
     imgTools: TImageList;
-    pnlTitle: TPanel;
     actPopup: TActionList;
     mnuPopup: TPopupMenu;
     actCopy: TAction;
@@ -236,7 +235,6 @@ type
     procedure btnDelNPrefixClick(Sender: TObject);
     procedure btnDelNSuffixClick(Sender: TObject);
     procedure btnDeleteEmptyLineClick(Sender: TObject);
-    procedure pnlTitleClick(Sender: TObject);
     procedure btnReverseLinesClick(Sender: TObject);
     procedure lblReplaceExchangeClick(Sender: TObject);
     procedure actStayOnTopExecute(Sender: TObject);
@@ -424,11 +422,6 @@ uses Clipbrd;
     procedure TfrmMain.actSelectAllExecute(Sender: TObject);
     begin
         txtMemo.SelectAll;
-    end;
-
-    procedure TfrmMain.pnlTitleClick(Sender: TObject);
-    begin
-        OpenURL('http://mjpclab.net/');
     end;
 
     procedure TfrmMain.lblReplaceExchangeClick(Sender: TObject);

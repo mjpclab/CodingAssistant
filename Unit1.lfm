@@ -1635,26 +1635,6 @@ object frmMain: TfrmMain
       end
     end
   end
-  object pnlTitle: TPanel
-    Cursor = crHandPoint
-    Left = 818
-    Height = 22
-    Top = 0
-    Width = 146
-    Alignment = taRightJustify
-    Anchors = [akTop, akRight]
-    BevelOuter = bvNone
-    Caption = 'http://mjpclab.net/'
-    Font.CharSet = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -12
-    Font.Name = 'Courier New'
-    Font.Style = [fsUnderline]
-    ParentBackground = False
-    ParentFont = False
-    TabOrder = 1
-    OnClick = pnlTitleClick
-  end
   object dlgOpen: TOpenDialog
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 16

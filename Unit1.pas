@@ -252,7 +252,7 @@ type
     procedure btnCompactEmptyLineClick(Sender: TObject);
     procedure actCopyTabExecute(Sender: TObject);
     procedure txtMemoKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure txtMemoMouseDown(Sender: TObject; Button: TMouseButton;
+    procedure txtMemoMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure btnDelPrefixClick(Sender: TObject);
     procedure btnDelSuffixClick(Sender: TObject);
@@ -347,7 +347,7 @@ uses Clipbrd;
     begin
         RefreshMemoPosition;
     end;
-    procedure TfrmMain.txtMemoMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure TfrmMain.txtMemoMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     begin
         RefreshMemoPosition;
     end;

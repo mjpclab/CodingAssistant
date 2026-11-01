@@ -284,7 +284,7 @@ object frmMain: TfrmMain
     WordWrap = False
     OnKeyDown = txtMemoKeyDown
     OnKeyUp = txtMemoKeyUp
-    OnMouseDown = txtMemoMouseDown
+    OnMouseUp = txtMemoMouseUp
   end
   object pnlTop: TPanel
     Left = 0

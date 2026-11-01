@@ -292,6 +292,7 @@ type
     function GetTool:TCodeUtility;
     procedure GetCursorPosition(const txt:TCustomMemo;out rowNum,colNum:integer);
     procedure RefreshMemoPosition;
+    procedure ApplyMemoFont;
     {$IFDEF DARWIN}
     //macOS only menu bar; see BuildMacMenuBar for why it exists.
     procedure BuildMacMenuBar;
@@ -322,6 +323,12 @@ implementation
 uses Clipbrd;
 
 {$R *.lfm}
+
+const
+    //Ligature-free monospace fonts for the memo, in order of preference; the first installed one wins.
+    MemoFontCandidates: array[0..7] of string = (
+        'Menlo', 'Cascadia Mono', 'JetBrains Mono NL',
+        'DejaVu Sans Mono', 'Liberation Mono', 'Noto Sans Mono', 'Consolas', 'Courier New');
 
 {$REGION 'UI'}
     procedure TfrmMain.txtMemoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -593,9 +600,22 @@ uses Clipbrd;
         FTool:=TCodeUtility.Create(txtMemo.Lines);
         edtSeqTemplate.Text:=TrimRight(edtSeqTemplate.Text);     //remove the end new empty line
         ActiveControl:=txtMemo;                                  //focus the main text area on startup
+        ApplyMemoFont;
         {$IFDEF DARWIN}
         BuildMacMenuBar;
         {$ENDIF}
+    end;
+
+    procedure TfrmMain.ApplyMemoFont;
+    var
+        fontName:string;
+    begin
+        for fontName in MemoFontCandidates do
+            if Screen.Fonts.IndexOf(fontName)>=0 then
+            begin
+                txtMemo.Font.Name:=fontName;
+                Exit;
+            end;
     end;
 
     function TfrmMain.GetTool:TCodeUtility;
